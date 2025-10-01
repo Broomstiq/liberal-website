@@ -341,7 +341,17 @@ pnpm dev
   name: 'project',
   title: 'Projet',
   type: 'document',
+  // Document-level validation: au moins un média visuel requis
+  // Note: youtubeUrl compte comme média visuel (thumbnail YouTube auto-extraite)
+  validation: Rule => Rule.custom((doc) => {
+    const hasVisual = doc?.mosaicThumbnail || doc?.mainGif || doc?.mainImage || doc?.youtubeUrl
+    if (!hasVisual) {
+      return 'Au moins un média visuel est requis (mosaicThumbnail, mainGif, mainImage, ou youtubeUrl)'
+    }
+    return true
+  }),
   fields: [
+    // === MANDATORY FIELDS ===
     {
       name: 'title',
       title: 'Titre',
@@ -359,21 +369,75 @@ pnpm dev
       validation: Rule => Rule.required()
     },
     {
-      name: 'gifPreview',
-      title: 'GIF Preview (Mosaïque)',
-      type: 'image',
-      options: {
-        hotspot: true,
-        accept: 'image/gif'
-      },
+      name: 'publishedAt',
+      title: 'Date de Publication',
+      type: 'datetime',
+      description: 'Date du projet (utilisée pour le tri chronologique)',
+      initialValue: () => new Date().toISOString(),
       validation: Rule => Rule.required()
+    },
+
+    // === MEDIA FIELDS (flexible) ===
+    {
+      name: 'mosaicThumbnail',
+      title: 'Vignette Mosaïque (optionnel)',
+      type: 'image',
+      description: '🎯 GIF/image pour la mosaïque homepage. Si vide, utilise mainGif, mainImage, ou thumbnail YouTube automatique. Ratio 16:9 recommandé. <5MB.',
+      options: {
+        hotspot: true
+      }
+    },
+    {
+      name: 'mainGif',
+      title: 'GIF Principal',
+      type: 'image',
+      description: '🎬 GIF animé qui EST le projet (résultat final). Utilisé comme vignette mosaïque si pas de mosaicThumbnail.',
+      options: {
+        hotspot: true
+      }
+    },
+    {
+      name: 'mainImage',
+      title: 'Image Principale',
+      type: 'image',
+      description: '🖼️ Image statique principale. Fallback vignette mosaïque si pas de GIF.',
+      options: {
+        hotspot: true
+      }
+    },
+    {
+      name: 'gallery',
+      title: 'Galerie Images/GIFs',
+      type: 'array',
+      description: '🎨 Galerie d\'images ou GIFs additionnels (affichés sur page projet)',
+      of: [
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            {
+              name: 'caption',
+              type: 'string',
+              title: 'Légende (optionnel)'
+            }
+          ]
+        }
+      ]
     },
     {
       name: 'youtubeUrl',
-      title: 'URL YouTube',
+      title: 'URL Vidéo YouTube',
       type: 'url',
-      validation: Rule => Rule.required()
+      description: '🎥 Lien YouTube de la vidéo du projet (optionnel)'
     },
+    {
+      name: 'websiteUrl',
+      title: 'URL Site Web',
+      type: 'url',
+      description: '🔗 Lien vers le site web du client/projet (optionnel)'
+    },
+
+    // === METADATA FIELDS (all optional) ===
     {
       name: 'client',
       title: 'Client / Studio',
@@ -395,8 +459,7 @@ pnpm dev
       name: 'categories',
       title: 'Catégories',
       type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'category' }] }],
-      validation: Rule => Rule.required().min(1)
+      of: [{ type: 'reference', to: [{ type: 'category' }] }]
     },
     {
       name: 'contextText',
@@ -405,6 +468,8 @@ pnpm dev
       of: [{ type: 'block' }], // Portable Text (rich text)
       description: 'Description du projet (court pour corpo, long pour projets perso)'
     },
+
+    // === DISPLAY OPTIONS ===
     {
       name: 'featured',
       title: 'Travail Phare',
@@ -417,19 +482,22 @@ pnpm dev
       title: 'Ordre (pour tri manuel)',
       type: 'number',
       description: 'Laisser vide pour tri chronologique automatique'
-    },
-    {
-      name: 'publishedAt',
-      title: 'Date de Publication',
-      type: 'datetime',
-      initialValue: () => new Date().toISOString()
     }
   ],
   preview: {
     select: {
       title: 'title',
-      media: 'gifPreview',
-      subtitle: 'client'
+      mosaicThumbnail: 'mosaicThumbnail',
+      mainGif: 'mainGif',
+      mainImage: 'mainImage',
+      client: 'client'
+    },
+    prepare({ title, mosaicThumbnail, mainGif, mainImage, client }) {
+      return {
+        title,
+        media: mosaicThumbnail || mainGif || mainImage,
+        subtitle: client || 'Sans client'
+      }
     }
   }
 }
@@ -452,23 +520,80 @@ pnpm dev
       type: 'slug',
       options: {
         source: 'title'
+      },
+      validation: Rule => Rule.required()
+    },
+    {
+      name: 'icon',
+      title: 'Icône de Catégorie',
+      type: 'image',
+      description: '🎨 Image/dessin personnalisé pour le bouton de filtre. Format recommandé: SVG ou PNG transparent. Ratio: carré (1:1) recommandé.',
+      options: {
+        hotspot: true
       }
     },
     {
       name: 'description',
       title: 'Description',
       type: 'text'
+    },
+    {
+      name: 'order',
+      title: 'Ordre d\'affichage',
+      type: 'number',
+      description: 'Ordre dans la barre de filtres (plus petit = plus à gauche)',
+      initialValue: 0
     }
-  ]
+  ],
+  preview: {
+    select: {
+      title: 'title',
+      media: 'icon',
+      order: 'order'
+    },
+    prepare({ title, media, order }) {
+      return {
+        title,
+        media,
+        subtitle: order !== undefined ? `Ordre: ${order}` : 'Pas d\'ordre défini'
+      }
+    }
+  }
 }
 
 // Categories prédéfinies à créer :
-// - Corpo (Motion Design & Graphisme)
-// - Court-métrage
-// - 3D (Infographie)
-// - Vidéo-mapping
-// - Art Vidéo
+// - Corpo (Motion Design & Graphisme) + icône custom Libé
+// - Court-métrage + icône custom Libé
+// - 3D (Infographie) + icône custom Libé
+// - Vidéo-mapping + icône custom Libé
+// - Art Vidéo + icône custom Libé
+// Note: Libé peut dessiner ses propres icônes pour personnaliser l'UI des filtres
 ```
+
+**YouTube Thumbnail Auto-Extraction**:
+
+Pour simplifier la création de projets, si un projet contient uniquement un lien YouTube (sans upload d'image custom), la validation accepte ce projet et le frontend extrait automatiquement la thumbnail YouTube pour la vignette mosaïque.
+
+```typescript
+// Utility functions pour extraction YouTube thumbnail (lib/sanity.ts)
+
+// Extraction du video ID depuis URL YouTube
+extractYouTubeId('https://youtube.com/watch?v=dQw4w9WgXcQ') // → 'dQw4w9WgXcQ'
+extractYouTubeId('https://youtu.be/dQw4w9WgXcQ') // → 'dQw4w9WgXcQ'
+
+// Génération URL thumbnail
+getYouTubeThumbnail('https://youtube.com/watch?v=dQw4w9WgXcQ', 'max')
+// → 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg' (1280x720)
+
+// Cascade logique pour vignette mosaïque :
+thumbnail = mosaicThumbnail || mainGif || mainImage || getYouTubeThumbnail(youtubeUrl)
+```
+
+**Avantages** :
+- ✅ Libé peut créer un projet avec juste un lien YouTube (validation passe)
+- ✅ Thumbnail automatique ratio 16:9 (cohérent avec GIFs)
+- ✅ Performance : thumbnails YouTube servies depuis CDN YouTube
+- ✅ Fallback : si maxresdefault n'existe pas, utilise hqdefault (480x360)
 
 **Data Storage Strategy**:
 - **User Data** : Pas d'authentification utilisateurs visiteurs (pas de login)
