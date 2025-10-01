@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Libé - Component Library & Design System</title>
+    <style>
+        /* Design System Variables */
+        :root {
+            /* Colors - Black & White Theme */
+            --black: #000000;
+            --white: #FFFFFF;
+            --gray-dark: #1A1A1A;
+            --gray-medium: #333333;
+            --gray-light: #A0A0A0;
+            --gray-very-light: #F0F0F0;
+            
+            /* Functional Colors */
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+            
+            /* Spacing Scale (8px base) */
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 16px;
+            --space-4: 24px;
+            --space-5: 32px;
+            --space-6: 48px;
+            --space-7: 64px;
+            
+            /* Typography Scale */
+            --text-sm: 14px;
+            --text-base: 16px;
+            --text-lg: 18px;
+            --text-xl: 20px;
+            --text-2xl: 24px;
+            --text-3xl: 32px;
+            --text-4xl: 40px;
+            
+            /* Shadows - Minimal pour design noir/blanc */
+            --shadow-sm: 0 2px 4px rgba(255, 255, 255, 0.05);
+            --shadow-md: 0 4px 8px rgba(255, 255, 255, 0.08);
+            
+            /* Transitions */
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.2s ease;
+            --transition-slow: 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            background: var(--gray-very-light);
+            color: var(--black);
+            padding: var(--space-4);
+        }
+        
+        .design-system-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .section {
+            background: var(--white);
+            padding: var(--space-6);
+            margin-bottom: var(--space-4);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .section h2 {
+            margin-top: 0;
+            margin-bottom: var(--space-4);
+            color: var(--black);
+            border-bottom: 2px solid var(--black);
+            padding-bottom: var(--space-2);
+            font-size: var(--text-3xl);
+        }
+        
+        .section h3 {
+            margin-top: var(--space-5);
+            margin-bottom: var(--space-3);
+            color: var(--black);
+            font-size: var(--text-2xl);
+        }
+        
+        /* Color Palette */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--space-3);
+        }
+        
+        .color-swatch {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-3);
+            color: var(--white);
+            font-size: var(--text-sm);
+            font-weight: 600;
+            text-align: center;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .color-swatch.light-text {
+            color: var(--black);
+        }
+        
+        .color-name {
+            font-size: var(--text-sm);
+            margin-bottom: var(--space-1);
+        }
+        
+        .color-hex {
+            font-size: var(--text-sm);
+            opacity: 0.8;
+            font-family: monospace;
+        }
+        
+        /* Typography */
+        .typography-demo {
+            background: var(--black);
+            padding: var(--space-5);
+            border-radius: 8px;
+            color: var(--white);
+        }
+        
+        .typography-demo h1 { 
+            font-size: var(--text-4xl); 
+            margin-bottom: var(--space-3);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .typography-demo h2 { 
+            font-size: var(--text-3xl); 
+            margin-bottom: var(--space-3);
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        .typography-demo h3 { 
+            font-size: var(--text-2xl); 
+            margin-bottom: var(--space-2);
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        .typography-demo p { 
+            font-size: var(--text-base); 
+            margin-bottom: var(--space-3);
+            line-height: 1.6;
+        }
+        .typography-demo .small { 
+            font-size: var(--text-sm); 
+            color: var(--gray-light);
+            line-height: 1.5;
+        }
+        
+        /* Button Components */
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-4);
+            background: var(--black);
+            padding: var(--space-5);
+            border-radius: 8px;
+        }
+        
+        .button-demo {
+            text-align: center;
+        }
+        
+        .button-demo h4 {
+            color: var(--white);
+            margin-bottom: var(--space-3);
+            font-size: var(--text-base);
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: var(--text-base);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: inline-block;
+            text-decoration: none;
+            border: none;
+            margin: var(--space-1);
+        }
+        
+        .btn-primary {
+            background: var(--white);
+            color: var(--black);
+        }
+        
+        .btn-primary:hover {
+            background: var(--gray-very-light);
+            transform: scale(1.02);
+        }
+        
+        .btn-ghost {
+            background: transparent;
+            color: var(--white);
+            border: 1px solid var(--white);
+        }
+        
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-width: 2px;
+            padding: 11px 23px; /* Compensate for border increase */
+        }
+        
+        .btn-text {
+            background: transparent;
+            color: var(--white);
+            text-decoration: underline;
+            padding: 4px 8px;
+        }
+        
+        .btn-text:hover {
+            opacity: 0.8;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        /* Form Components */
+        .form-demo {
+            background: var(--black);
+            padding: var(--space-5);
+            border-radius: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: var(--space-4);
+        }
+        
+        .label {
+            display: block;
+            font-weight: 500;
+            color: var(--gray-light);
+            margin-bottom: var(--space-2);
+            font-size: var(--text-sm);
+        }
+        
+        .input,
+        .textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--gray-medium);
+            border-radius: 4px;
+            font-size: var(--text-base);
+            transition: all var(--transition-normal);
+            background: rgba(10, 10, 10, 0.8);
+            color: var(--white);
+            font-family: inherit;
+        }
+        
+        .input:focus,
+        .textarea:focus {
+            outline: none;
+            border-color: var(--white);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+        
+        .input.error {
+            border-color: var(--error);
+        }
+        
+        .input.success {
+            border-color: var(--success);
+        }
+        
+        .textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .error-message {
+            color: var(--error);
+            font-size: var(--text-sm);
+            margin-top: var(--space-1);
+        }
+        
+        /* Card Components */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-4);
+        }
+        
+        .card {
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all var(--transition-normal);
+        }
+        
+        .card-mosaic {
+            background: var(--gray-medium);
+            aspect-ratio: 16/9;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .card-mosaic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .card-mosaic-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+        
+        .card-mosaic:hover .card-mosaic-overlay {
+            opacity: 1;
+        }
+        
+        .card-mosaic-title {
+            color: var(--white);
+            font-size: var(--text-lg);
+            font-weight: 600;
+            text-align: center;
+            padding: var(--space-3);
+        }
+        
+        .card-featured {
+            background: var(--black);
+            border: 2px solid var(--white);
+            padding: var(--space-3);
+        }
+        
+        .card-featured:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .card-featured-image {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: var(--gray-medium);
+            border-radius: 4px;
+            margin-bottom: var(--space-2);
+        }
+        
+        .card-featured-title {
+            color: var(--white);
+            font-size: var(--text-lg);
+            font-weight: 600;
+            margin-bottom: var(--space-1);
+        }
+        
+        .card-featured-client {
+            color: var(--gray-light);
+            font-size: var(--text-sm);
+        }
+        
+        /* Header Component */
+        .header-demo {
+            background: var(--black);
+            padding: var(--space-4) var(--space-6);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px;
+            position: sticky;
+            top: var(--space-4);
+            z-index: 100;
+        }
+        
+        .logo {
+            color: var(--white);
+            font-size: var(--text-xl);
+            font-weight: 700;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: var(--space-5);
+            list-style: none;
+        }
+        
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            font-size: var(--text-base);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: opacity var(--transition-fast);
+        }
+        
+        .nav-link:hover {
+            opacity: 0.7;
+        }
+        
+        /* Filter Component */
+        .filter-demo {
+            background: var(--black);
+            padding: var(--space-4) var(--space-6);
+            border-radius: 8px;
+            margin-top: var(--space-4);
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: var(--space-2);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: var(--text-base);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            background: transparent;
+            color: var(--white);
+            border: 1px solid var(--white);
+        }
+        
+        .filter-btn:hover {
+            background: var(--gray-dark);
+        }
+        
+        .filter-btn.active {
+            background: var(--white);
+            color: var(--black);
+            border-color: var(--white);
+        }
+        
+        /* Mobile Frame */
+        .mobile-frame {
+            width: 375px;
+            max-width: 100%;
+            height: 667px;
+            border: 8px solid var(--black);
+            border-radius: 24px;
+            background: var(--black);
+            margin: 0 auto;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .mobile-content {
+            padding: var(--space-3);
+            height: 100%;
+            overflow-y: auto;
+            background: var(--black);
+        }
+        
+        .mobile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-3);
+            background: var(--black);
+            border-bottom: 1px solid var(--gray-medium);
+            margin: calc(-1 * var(--space-3)) calc(-1 * var(--space-3)) var(--space-3);
+        }
+        
+        .mobile-logo {
+            color: var(--white);
+            font-weight: 700;
+            font-size: var(--text-lg);
+        }
+        
+        .burger-menu {
+            width: 24px;
+            height: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+        
+        .burger-line {
+            width: 100%;
+            height: 2px;
+            background: var(--white);
+        }
+        
+        /* Spacing Examples */
+        .spacing-demo {
+            display: flex;
+            align-items: flex-end;
+            gap: var(--space-2);
+            margin-top: var(--space-4);
+        }
+        
+        .spacing-bar {
+            background: var(--black);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            color: var(--white);
+            font-size: 10px;
+            font-weight: 600;
+            padding: var(--space-1);
+        }
+        
+        /* Video Player Mock */
+        .video-player-mock {
+            background: var(--black);
+            aspect-ratio: 16/9;
+            border: 2px solid var(--white);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: var(--space-4);
+        }
+        
+        .play-icon {
+            width: 80px;
+            height: 80px;
+            border: 3px solid var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform var(--transition-normal);
+        }
+        
+        .play-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .play-triangle {
+            width: 0;
+            height: 0;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-left: 25px solid var(--white);
+            margin-left: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none; /* Burger menu on mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="design-system-container">
+        <h1 style="margin-bottom: var(--space-6); font-size: 48px;">Portfolio Libé - Design System & Component Library</h1>
+        <p style="margin-bottom: var(--space-6); font-size: var(--text-lg); color: var(--gray-light);">
+            Design minimaliste noir & blanc pour mettre en valeur les animations
+        </p>
+        
+        <!-- Color Palette -->
+        <div class="section">
+            <h2>Palette de Couleurs</h2>
+            <p style="margin-bottom: var(--space-4);">
+                Design monochrome noir & blanc avec touches de couleurs fonctionnelles
+            </p>
+            <div class="color-grid">
+                <div class="color-swatch" style="background: var(--black);">
+                    <div class="color-name">Black</div>
+                    <div class="color-hex">#000000</div>
+                </div>
+                <div class="color-swatch light-text" style="background: var(--white);">
+                    <div class="color-name">White</div>
+                    <div class="color-hex">#FFFFFF</div>
+                </div>
+                <div class="color-swatch" style="background: var(--gray-dark);">
+                    <div class="color-name">Gray Dark</div>
+                    <div class="color-hex">#1A1A1A</div>
+                </div>
+                <div class="color-swatch" style="background: var(--gray-medium);">
+                    <div class="color-name">Gray Medium</div>
+                    <div class="color-hex">#333333</div>
+                </div>
+                <div class="color-swatch" style="background: var(--gray-light);">
+                    <div class="color-name">Gray Light</div>
+                    <div class="color-hex">#A0A0A0</div>
+                </div>
+                <div class="color-swatch" style="background: var(--success);">
+                    <div class="color-name">Success</div>
+                    <div class="color-hex">#10B981</div>
+                </div>
+                <div class="color-swatch" style="background: var(--error);">
+                    <div class="color-name">Error</div>
+                    <div class="color-hex">#EF4444</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Typography -->
+        <div class="section">
+            <h2>Typographie</h2>
+            <div class="typography-demo">
+                <h1>Page Title - 40px / Bold</h1>
+                <h2>Section Header - 32px / Bold</h2>
+                <h3>Subsection - 24px / SemiBold</h3>
+                <p>Body text avec line-height confortable pour lecture optimale. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. - 16px / Regular</p>
+                <p class="small">Small text pour captions et metadata - 14px / Regular</p>
+            </div>
+        </div>
+        
+        <!-- Button Components -->
+        <div class="section">
+            <h2>Boutons</h2>
+            <div class="button-grid">
+                <div class="button-demo">
+                    <h4>Primary Button</h4>
+                    <button class="btn btn-primary">Me Contacter</button>
+                    <button class="btn btn-primary" disabled>Disabled</button>
+                </div>
+                <div class="button-demo">
+                    <h4>Ghost Button</h4>
+                    <button class="btn btn-ghost">Voir Projets</button>
+                    <button class="btn btn-ghost" disabled>Disabled</button>
+                </div>
+                <div class="button-demo">
+                    <h4>Text Button</h4>
+                    <button class="btn btn-text">Retour</button>
+                    <button class="btn btn-text" disabled>Disabled</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Form Components -->
+        <div class="section">
+            <h2>Éléments de Formulaire</h2>
+            <div class="form-demo">
+                <div class="form-group">
+                    <label class="label">Nom</label>
+                    <input type="text" class="input" placeholder="Votre nom">
+                </div>
+                <div class="form-group">
+                    <label class="label">Email</label>
+                    <input type="email" class="input" placeholder="votre@email.com">
+                </div>
+                <div class="form-group">
+                    <label class="label">Email avec Erreur</label>
+                    <input type="email" class="input error" value="email-invalide">
+                    <div class="error-message">Format d'email invalide</div>
+                </div>
+                <div class="form-group">
+                    <label class="label">Message</label>
+                    <textarea class="textarea" placeholder="Décrivez votre projet..."></textarea>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Header Component -->
+        <div class="section">
+            <h2>Header (Navigation Principale)</h2>
+            <p style="margin-bottom: var(--space-4);">Header sticky qui reste visible au scroll</p>
+            <div class="header-demo">
+                <a href="#" class="logo">LIBÉ</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="#" class="nav-link">Travaux</a></li>
+                        <li><a href="#" class="nav-link">À Propos</a></li>
+                        <li><a href="#" class="nav-link">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        
+        <!-- Filter Component -->
+        <div class="section">
+            <h2>Filtres de Catégories</h2>
+            <p style="margin-bottom: var(--space-4);">Filtres pour navigation orientée par type de projet</p>
+            <div class="filter-demo">
+                <div class="filter-buttons">
+                    <button class="filter-btn active">Tout</button>
+                    <button class="filter-btn">Corpo</button>
+                    <button class="filter-btn">Court-métrage</button>
+                    <button class="filter-btn">3D</button>
+                    <button class="filter-btn">Vidéo-mapping</button>
+                    <button class="filter-btn">Art Vidéo</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card Components -->
+        <div class="section">
+            <h2>Cards de Projets</h2>
+            
+            <h3>Cards Mosaïque (Homepage)</h3>
+            <p style="margin-bottom: var(--space-3);">Hover pour voir overlay avec titre du projet</p>
+            <div class="card-grid">
+                <div class="card card-mosaic">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='225'%3E%3Crect fill='%23333' width='400' height='225'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23999' font-size='20' font-family='Arial'%3EGIF Preview%3C/text%3E%3C/svg%3E" alt="Project preview">
+                    <div class="card-mosaic-overlay">
+                        <div class="card-mosaic-title">Desintox - ARTE</div>
+                    </div>
+                </div>
+                <div class="card card-mosaic">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='225'%3E%3Crect fill='%23333' width='400' height='225'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23999' font-size='20' font-family='Arial'%3EGIF Preview%3C/text%3E%3C/svg%3E" alt="Project preview">
+                    <div class="card-mosaic-overlay">
+                        <div class="card-mosaic-title">Querelle de Clochers</div>
+                    </div>
+                </div>
+                <div class="card card-mosaic">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='225'%3E%3Crect fill='%23333' width='400' height='225'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23999' font-size='20' font-family='Arial'%3EGIF Preview%3C/text%3E%3C/svg%3E" alt="Project preview">
+                    <div class="card-mosaic-overlay">
+                        <div class="card-mosaic-title">Le LABO Cambrai</div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>Cards "Travaux Phares"</h3>
+            <p style="margin-bottom: var(--space-3);">Projets mis en avant avec border blanche et effet hover</p>
+            <div class="card-grid">
+                <div class="card card-featured">
+                    <div class="card-featured-image"></div>
+                    <div class="card-featured-title">Desintox - ARTE</div>
+                    <div class="card-featured-client">ARTE - Réalisation & Animation</div>
+                </div>
+                <div class="card card-featured">
+                    <div class="card-featured-image"></div>
+                    <div class="card-featured-title">Querelle de Clochers</div>
+                    <div class="card-featured-client">Court-métrage - Réalisation</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Video Player -->
+        <div class="section">
+            <h2>Video Player (YouTube Embed Custom)</h2>
+            <p style="margin-bottom: var(--space-3);">Player YouTube avec wrapper custom et border blanche</p>
+            <div class="video-player-mock">
+                <div class="play-icon">
+                    <div class="play-triangle"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Layout -->
+        <div class="section">
+            <h2>Layout Mobile</h2>
+            <p style="margin-bottom: var(--space-4);">Aperçu responsive avec burger menu et mosaïque verticale</p>
+            <div class="mobile-frame">
+                <div class="mobile-content">
+                    <div class="mobile-header">
+                        <div class="mobile-logo">LIBÉ</div>
+                        <div class="burger-menu">
+                            <div class="burger-line"></div>
+                            <div class="burger-line"></div>
+                            <div class="burger-line"></div>
+                        </div>
+                    </div>
+                    
+                    <h3 style="color: var(--white); margin-bottom: var(--space-3);">Travaux Phares</h3>
+                    
+                    <div class="card card-featured" style="margin-bottom: var(--space-3);">
+                        <div class="card-featured-image"></div>
+                        <div class="card-featured-title">Desintox - ARTE</div>
+                        <div class="card-featured-client">ARTE - 2024</div>
+                    </div>
+                    
+                    <h3 style="color: var(--white); margin-bottom: var(--space-3); margin-top: var(--space-4);">Tous les Projets</h3>
+                    
+                    <div class="card card-mosaic" style="margin-bottom: var(--space-3);">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='225'%3E%3Crect fill='%23333' width='400' height='225'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23999' font-size='16' font-family='Arial'%3EProject GIF%3C/text%3E%3C/svg%3E" alt="Project">
+                        <div class="card-mosaic-overlay">
+                            <div class="card-mosaic-title">Projet 1</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card card-mosaic">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='225'%3E%3Crect fill='%23333' width='400' height='225'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23999' font-size='16' font-family='Arial'%3EProject GIF%3C/text%3E%3C/svg%3E" alt="Project">
+                        <div class="card-mosaic-overlay">
+                            <div class="card-mosaic-title">Projet 2</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Spacing System -->
+        <div class="section">
+            <h2>Système d'Espacements</h2>
+            <p>Base unit: 8px | Scale: 4px, 8px, 16px, 24px, 32px, 48px, 64px</p>
+            <div class="spacing-demo">
+                <div class="spacing-bar" style="width: 4px; height: 20px;">4</div>
+                <div class="spacing-bar" style="width: 8px; height: 30px;">8</div>
+                <div class="spacing-bar" style="width: 16px; height: 40px;">16</div>
+                <div class="spacing-bar" style="width: 24px; height: 50px;">24</div>
+                <div class="spacing-bar" style="width: 32px; height: 60px;">32</div>
+                <div class="spacing-bar" style="width: 48px; height: 70px;">48</div>
+                <div class="spacing-bar" style="width: 64px; height: 80px;">64</div>
+            </div>
+        </div>
+        
+        <!-- Usage Notes -->
+        <div class="section">
+            <h2>Notes d'Utilisation</h2>
+            
+            <h3>Philosophie du Design</h3>
+            <ul style="line-height: 1.8; margin-bottom: var(--space-4);">
+                <li><strong>Minimalisme Noir & Blanc</strong> : Le design doit être discret pour laisser les animations parler</li>
+                <li><strong>Mouvement au Cœur</strong> : Chaque élément interactif a des transitions fluides</li>
+                <li><strong>Performance Critique</strong> : Lazy loading et optimisations pour chargement rapide des GIFs</li>
+                <li><strong>Mobile-First</strong> : Design pensé d'abord pour mobile, puis enrichi pour desktop</li>
+            </ul>
+            
+            <h3>Priorités d'Implémentation</h3>
+            <ul style="line-height: 1.8; margin-bottom: var(--space-4);">
+                <li><strong>Must-Have MVP</strong> : Header sticky, mosaïque GIFs avec lazy loading, filtres, formulaire contact</li>
+                <li><strong>Phase 2</strong> : Fond animé custom, animations hover boutons réseaux, double système filtres</li>
+            </ul>
+            
+            <h3>Accessibilité</h3>
+            <ul style="line-height: 1.8;">
+                <li>Contraste noir/blanc : 21:1 ratio (WCAG AAA)</li>
+                <li>Touch targets minimum 48x48px sur mobile</li>
+                <li>Navigation au clavier complète</li>
+                <li>Alt text pour tous les GIFs/images</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
