@@ -3,7 +3,9 @@ import Link from 'next/link'
 import { PortableText } from '@portabletext/react'
 import { Header } from '@/components/Header'
 import { VideoPlayer } from '@/components/VideoPlayer'
+import { ImageViewer } from '@/components/ImageViewer'
 import { getProjectBySlug, getProjects } from '@/lib/queries'
+import { urlFor } from '@/lib/sanity'
 
 /**
  * Project Detail Page
@@ -44,9 +46,33 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           {/* Title */}
           <h1 className="text-4xl md:text-5xl font-bold mb-8">{project.title}</h1>
 
-          {/* Video Player */}
+          {/* Media Display - Cascade: YouTube > mainImage > mainGif > gallery[0] */}
           <div className="mb-12">
-            <VideoPlayer youtubeUrl={project.youtubeUrl} title={project.title} />
+            {project.youtubeUrl ? (
+              <VideoPlayer youtubeUrl={project.youtubeUrl} title={project.title} />
+            ) : project.mainImage ? (
+              <ImageViewer
+                src={urlFor(project.mainImage).width(1920).url()}
+                alt={project.title}
+                priority
+              />
+            ) : project.mainGif ? (
+              <ImageViewer
+                src={urlFor(project.mainGif).width(1920).url()}
+                alt={project.title}
+                priority
+              />
+            ) : project.gallery && project.gallery.length > 0 ? (
+              <ImageViewer
+                src={urlFor(project.gallery[0]).width(1920).url()}
+                alt={project.title}
+                priority
+              />
+            ) : (
+              <div className="w-full aspect-video bg-gray-900 flex items-center justify-center rounded-lg border-2 border-white/30">
+                <p className="text-white/60">Aucun média disponible</p>
+              </div>
+            )}
           </div>
 
           {/* Metadata Grid */}

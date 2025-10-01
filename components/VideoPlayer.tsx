@@ -13,13 +13,14 @@
  * - Responsive aspect ratio (16:9)
  */
 interface VideoPlayerProps {
-  youtubeUrl: string
+  youtubeUrl?: string
   title: string
 }
 
 export function VideoPlayer({ youtubeUrl, title }: VideoPlayerProps) {
   // Extract video ID from YouTube URL
-  const getVideoId = (url: string) => {
+  const getVideoId = (url: string | null | undefined) => {
+    if (!url) return null
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
     const match = url.match(regExp)
     return match && match[2].length === 11 ? match[2] : null
@@ -35,7 +36,7 @@ export function VideoPlayer({ youtubeUrl, title }: VideoPlayerProps) {
     )
   }
 
-  const embedUrl = `https://www.youtube.com/embed/${videoId}?modestbranding=1&rel=0&controls=1`
+  const embedUrl = `https://www.youtube.com/embed/${videoId}?modestbranding=1&rel=0&controls=1&showinfo=0&fs=1&iv_load_policy=3&disablekb=0&color=white&playsinline=1`
 
   return (
     <div className="relative w-full aspect-video rounded-lg overflow-hidden border-2 border-white">
