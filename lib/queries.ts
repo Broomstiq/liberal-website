@@ -22,7 +22,7 @@ export async function getProjects(start = 0, limit = 12, categorySlug?: string) 
         client,
         year,
         role,
-        categories[]-> { title, slug },
+        categories[]-> { _id, title, slug },
         featured,
         publishedAt
       }`
@@ -38,7 +38,7 @@ export async function getProjects(start = 0, limit = 12, categorySlug?: string) 
         client,
         year,
         role,
-        categories[]-> { title, slug },
+        categories[]-> { _id, title, slug },
         featured,
         publishedAt
       }`
@@ -83,7 +83,7 @@ export async function getProjectBySlug(slug: string) {
     client,
     year,
     role,
-    categories[]-> { title, slug },
+    categories[]-> { _id, title, slug },
     contextText,
     publishedAt
   }`
