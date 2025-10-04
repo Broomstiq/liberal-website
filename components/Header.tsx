@@ -46,8 +46,12 @@ export function Header() {
       <nav className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="text-2xl font-bold hover:opacity-80 transition-opacity">
-            Libé Animation
+          <Link href="/" className="hover:opacity-80 transition-opacity">
+            <img
+              src="/ressources/liberal_martin_handwritten_white.png"
+              alt="Libé"
+              className="h-12 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}

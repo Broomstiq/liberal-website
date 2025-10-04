@@ -13,7 +13,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body className="bg-black text-white antialiased">
+      <body
+        className="text-white antialiased"
+        style={{
+          backgroundImage: 'url(/ressources/black_textured_bg.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
+      >
         {children}
       </body>
     </html>
