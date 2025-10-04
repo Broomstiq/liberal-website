@@ -71,7 +71,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="min-h-screen">
+      <main className="min-h-screen pt-24">
         {/* Featured Projects Section */}
         {featuredProjects.length > 0 && (
           <section className="container mx-auto px-4 py-12">

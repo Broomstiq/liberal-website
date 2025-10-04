@@ -32,8 +32,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   return (
     <>
       <Header />
-      <main className="min-h-screen">
-        <div className="container mx-auto px-4 py-8">
+      <main className="min-h-screen pt-24">
+        <div className="container mx-auto px-4 pb-8">
           {/* Breadcrumb */}
           <nav className="mb-6 text-sm">
             <Link href="/" className="text-white/60 hover:text-white transition-colors">
