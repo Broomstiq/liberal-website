@@ -39,11 +39,15 @@ export function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 bg-black transition-shadow duration-300 ${
-        scrolled ? 'shadow-lg shadow-white/10' : ''
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-black/80 backdrop-blur-md shadow-lg shadow-white/10'
+          : 'bg-black/60 backdrop-blur-sm'
       }`}
     >
-      <nav className="container mx-auto px-4 py-6">
+      <nav className={`container mx-auto px-4 transition-all duration-300 ${
+        scrolled ? 'py-3' : 'py-6'
+      }`}>
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="hover:opacity-80 transition-opacity">
