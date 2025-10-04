@@ -44,6 +44,7 @@ export interface Project {
   mainImage?: SanityImage
   gallery?: GalleryImage[]
   youtubeUrl?: string
+  vimeoUrl?: string
   websiteUrl?: string
 
   // Metadata (all optional)

@@ -3,7 +3,7 @@ import { client } from './sanity'
 /**
  * GROQ Queries for Sanity CMS
  *
- * Media fields cascade: mosaicThumbnail > mainGif > mainImage > youtubeUrl
+ * Media fields cascade: mosaicThumbnail > mainGif > mainImage > youtubeUrl > vimeoUrl
  * All media fields fetched to support thumbnail extraction logic
  */
 
@@ -18,6 +18,7 @@ export async function getProjects(start = 0, limit = 12, categorySlug?: string) 
         mainGif,
         mainImage,
         youtubeUrl,
+        vimeoUrl,
         websiteUrl,
         client,
         year,
@@ -34,6 +35,7 @@ export async function getProjects(start = 0, limit = 12, categorySlug?: string) 
         mainGif,
         mainImage,
         youtubeUrl,
+        vimeoUrl,
         websiteUrl,
         client,
         year,
@@ -60,6 +62,7 @@ export async function getFeaturedProjects() {
     mainGif,
     mainImage,
     youtubeUrl,
+    vimeoUrl,
     client,
     year,
     categories[]-> { title, slug }
@@ -79,6 +82,7 @@ export async function getProjectBySlug(slug: string) {
     mainImage,
     gallery,
     youtubeUrl,
+    vimeoUrl,
     websiteUrl,
     client,
     year,

@@ -51,6 +51,7 @@ export function Header() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="hover:opacity-80 transition-opacity">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/ressources/liberal_martin_handwritten_white.png"
               alt="Libé"

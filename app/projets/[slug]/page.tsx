@@ -12,7 +12,7 @@ import { urlFor } from '@/lib/sanity'
  *
  * @description
  * Individual project page with:
- * - YouTube video player
+ * - YouTube/Vimeo video player
  * - Project metadata (client, year, role, categories)
  * - Context text (Portable Text from Sanity)
  * - Breadcrumb navigation
@@ -46,10 +46,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           {/* Title */}
           <h1 className="text-4xl md:text-5xl font-bold mb-8">{project.title}</h1>
 
-          {/* Media Display - Cascade: YouTube > mainImage > mainGif > gallery[0] */}
+          {/* Media Display - Cascade: YouTube > Vimeo > mainImage > mainGif > gallery[0] */}
           <div className="mb-12">
-            {project.youtubeUrl ? (
-              <VideoPlayer youtubeUrl={project.youtubeUrl} title={project.title} />
+            {project.youtubeUrl || project.vimeoUrl ? (
+              <VideoPlayer
+                youtubeUrl={project.youtubeUrl}
+                vimeoUrl={project.vimeoUrl}
+                title={project.title}
+              />
             ) : project.mainImage ? (
               <ImageViewer
                 src={urlFor(project.mainImage).width(1920).url()}

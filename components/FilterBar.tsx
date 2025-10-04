@@ -2,35 +2,27 @@
 
 import Image from 'next/image'
 import type { Category } from '@/types'
+import { urlFor } from '@/lib/sanity'
 
 /**
- * FilterBar - Category filter component with custom tag images
+ * FilterBar - Category filter component with Sanity-managed images
  *
  * @description
- * Horizontal filter bar using custom PNG images for category buttons.
- * Images are white bordered tags with category names.
- * Active filter has increased opacity/scale, inactive has reduced opacity.
+ * Horizontal filter bar using category icon images from Sanity CMS.
+ * Falls back to text button if no icon uploaded in Sanity.
  *
  * @features
- * - "Tout" button to clear filters (text button)
- * - Custom PNG images for category tags
+ * - "Tout" button to clear filters
+ * - Dynamic image loading from Sanity icon field
  * - Active state visual feedback (opacity + scale)
  * - Smooth transitions (0.3s)
  * - Mobile: horizontal scroll
+ * - Automatic fallback to text if no icon in Sanity
  */
 interface FilterBarProps {
   categories: Category[]
   activeFilter: string | null
   onFilterChange: (slug: string | null) => void
-}
-
-// Map category titles to their image filenames
-const categoryImageMap: Record<string, string> = {
-  'Animation': 'Animation.png',
-  'Art Vidéo': 'Art-vidéo.png',
-  'Graphisme : Motion-Design': 'Graphisme : Motion-Design.png',
-  'Infographie 3D': 'Infographie 3D.png',
-  'Vidéo-mapping': 'Vidéo-mapping.png',
 }
 
 export function FilterBar({ categories, activeFilter, onFilterChange }: FilterBarProps) {
@@ -49,10 +41,10 @@ export function FilterBar({ categories, activeFilter, onFilterChange }: FilterBa
           Tout
         </button>
 
-        {/* Category buttons with custom images */}
+        {/* Category buttons with Sanity images */}
         {categories.map((category) => {
-          const imageName = categoryImageMap[category.title]
           const isActive = activeFilter === category.slug.current
+          const hasIcon = category.icon?.asset
 
           return (
             <button
@@ -63,18 +55,18 @@ export function FilterBar({ categories, activeFilter, onFilterChange }: FilterBa
               }`}
               aria-label={category.title}
             >
-              {imageName ? (
+              {hasIcon ? (
                 <Image
-                  src={`/ressources/categories_tags_white/${imageName}`}
+                  src={urlFor(category.icon).width(150).url()}
                   alt={category.title}
                   width={150}
                   height={50}
-                  className="h-auto w-auto max-h-12"
+                  className="h-auto w-auto max-h-8"
                   priority
                 />
               ) : (
-                // Fallback if image not found
-                <span className="px-6 py-2 rounded-full border-2 border-white text-white">
+                // Fallback to text if no icon uploaded in Sanity
+                <span className="px-6 py-2 rounded-full border-2 border-white text-white whitespace-nowrap">
                   {category.title}
                 </span>
               )}

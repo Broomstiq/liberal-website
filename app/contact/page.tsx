@@ -3,7 +3,7 @@ import { ContactForm } from '@/components/ContactForm'
 
 export const metadata = {
   title: 'Contact - Libé Animation',
-  description: 'Contactez Libé pour vos projets d\'animation et motion design',
+  description: 'Contactez Libé pour vos projets d&apos;animation et motion design',
 }
 
 export default function ContactPage() {
@@ -15,7 +15,7 @@ export default function ContactPage() {
           <div className="max-w-2xl mx-auto text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact</h1>
             <p className="text-lg text-white/70">
-              Une question ? Un projet ? N'hésitez pas à me contacter.
+              Une question ? Un projet ? N&apos;hésitez pas à me contacter.
             </p>
           </div>
 

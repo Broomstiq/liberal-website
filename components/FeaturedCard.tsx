@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { urlFor, getYouTubeThumbnail } from '@/lib/sanity'
+import { urlFor, getYouTubeThumbnail, getVimeoThumbnail } from '@/lib/sanity'
 import type { Project } from '@/types'
 
 /**
@@ -11,20 +11,20 @@ import type { Project } from '@/types'
  * @description
  * Larger card with white border for featured projects.
  * Displays on homepage before main mosaïque.
- * Supports cascade: mosaicThumbnail → mainGif → mainImage → YouTube thumbnail
+ * Supports cascade: mosaicThumbnail → mainGif → mainImage → YouTube/Vimeo thumbnail
  *
  * @features
  * - White border (2px)
  * - Hover scale effect (1.05)
  * - Project metadata visible
- * - Auto YouTube thumbnail extraction
+ * - Auto YouTube and Vimeo thumbnail extraction
  */
 interface FeaturedCardProps {
   project: Project
 }
 
 export function FeaturedCard({ project }: FeaturedCardProps) {
-  // Cascade logic: mosaicThumbnail > mainGif > mainImage > YouTube thumbnail
+  // Cascade logic: mosaicThumbnail > mainGif > mainImage > YouTube thumbnail > Vimeo thumbnail
   const getThumbnailUrl = (): string => {
     if (project.mosaicThumbnail) {
       return urlFor(project.mosaicThumbnail).width(1200).url()
@@ -37,6 +37,9 @@ export function FeaturedCard({ project }: FeaturedCardProps) {
     }
     if (project.youtubeUrl) {
       return getYouTubeThumbnail(project.youtubeUrl, 'max') || '/placeholder.png'
+    }
+    if (project.vimeoUrl) {
+      return getVimeoThumbnail(project.vimeoUrl) || '/placeholder.png'
     }
     return '/placeholder.png'
   }

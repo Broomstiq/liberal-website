@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useLazyLoad } from '@/lib/hooks/useLazyLoad'
-import { urlFor, getYouTubeThumbnail } from '@/lib/sanity'
+import { urlFor, getYouTubeThumbnail, getVimeoThumbnail } from '@/lib/sanity'
 import type { Project } from '@/types'
 
 /**
@@ -13,14 +13,14 @@ import type { Project } from '@/types'
  * @description
  * Interactive card displaying GIF preview with hover overlay showing title.
  * Implements lazy loading for performance optimization.
- * Supports cascade: mosaicThumbnail → mainGif → mainImage → YouTube thumbnail
+ * Supports cascade: mosaicThumbnail → mainGif → mainImage → YouTube/Vimeo thumbnail
  *
  * @features
  * - Lazy loading with IntersectionObserver
  * - Hover overlay with project title
  * - Click navigates to project detail page
  * - Next.js Image optimization
- * - Auto YouTube thumbnail extraction
+ * - Auto YouTube and Vimeo thumbnail extraction
  *
  * @performance
  * - GIF only loads when visible in viewport
@@ -34,7 +34,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
   const isVisible = useLazyLoad(cardRef, 0.1, '200px')
 
-  // Cascade logic: mosaicThumbnail > mainGif > mainImage > YouTube thumbnail
+  // Cascade logic: mosaicThumbnail > mainGif > mainImage > YouTube thumbnail > Vimeo thumbnail
   const getThumbnailUrl = (): string => {
     if (project.mosaicThumbnail) {
       return urlFor(project.mosaicThumbnail).width(800).url()
@@ -47,6 +47,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
     }
     if (project.youtubeUrl) {
       return getYouTubeThumbnail(project.youtubeUrl, 'max') || '/placeholder.png'
+    }
+    if (project.vimeoUrl) {
+      return getVimeoThumbnail(project.vimeoUrl) || '/placeholder.png'
     }
     return '/placeholder.png'
   }

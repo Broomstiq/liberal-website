@@ -84,7 +84,7 @@ export function ImageViewer({ src, alt, priority = false }: ImageViewerProps) {
 
           {/* ESC hint */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/60 text-sm">
-            ESC ou cliquer à l'extérieur pour fermer
+            ESC ou cliquer à l&apos;extérieur pour fermer
           </div>
         </div>
       )}
