@@ -6,9 +6,9 @@ export const project = defineType({
   type: 'document',
   validation: (Rule) =>
     Rule.custom((doc: any) => {
-      const hasVisual = doc?.mosaicThumbnail || doc?.mainGif || doc?.mainImage || doc?.youtubeUrl
+      const hasVisual = doc?.mosaicThumbnail || doc?.mainGif || doc?.mainImage || doc?.youtubeUrl || doc?.vimeoUrl
       if (!hasVisual) {
-        return 'Au moins un média visuel est requis (mosaicThumbnail, mainGif, mainImage, ou youtubeUrl)'
+        return 'Au moins un média visuel est requis (mosaicThumbnail, mainGif, mainImage, youtubeUrl, ou vimeoUrl)'
       }
       return true
     }),
@@ -44,7 +44,7 @@ export const project = defineType({
       name: 'mosaicThumbnail',
       title: 'Vignette Mosaïque (optionnel)',
       type: 'image',
-      description: '🎯 GIF/image pour la mosaïque homepage. Si vide, utilise mainGif, mainImage, ou thumbnail YouTube automatique. Ratio 16:9 recommandé. <5MB.',
+      description: '🎯 GIF/image pour la mosaïque homepage. Si vide, utilise mainGif, mainImage, ou thumbnail YouTube/Vimeo automatique. Ratio 16:9 recommandé. <5MB.',
       options: {
         hotspot: true,
       },
@@ -91,6 +91,12 @@ export const project = defineType({
       title: 'URL Vidéo YouTube',
       type: 'url',
       description: '🎥 Lien YouTube de la vidéo du projet (optionnel)',
+    }),
+    defineField({
+      name: 'vimeoUrl',
+      title: 'URL Vidéo Vimeo',
+      type: 'url',
+      description: '🎥 Lien Vimeo de la vidéo du projet (optionnel)',
     }),
     defineField({
       name: 'websiteUrl',

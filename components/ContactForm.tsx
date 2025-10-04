@@ -139,7 +139,7 @@ export function ContactForm() {
 
       {submitStatus === 'error' && (
         <div className="p-4 bg-red-500/20 border border-red-500 rounded-lg text-red-400">
-          Une erreur s'est produite. Veuillez réessayer.
+          Une erreur s&apos;est produite. Veuillez réessayer.
         </div>
       )}
     </form>

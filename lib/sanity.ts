@@ -54,3 +54,41 @@ export function getYouTubeThumbnail(youtubeUrl: string, quality: 'max' | 'high' 
 
   return `https://img.youtube.com/vi/${videoId}/${qualityMap[quality]}`
 }
+
+/**
+ * Extract Vimeo video ID from various Vimeo URL formats
+ * Supports: vimeo.com/ID, vimeo.com/video/ID, player.vimeo.com/video/ID
+ */
+export function extractVimeoId(url: string): string | null {
+  if (!url) return null
+
+  const patterns = [
+    /vimeo\.com\/(\d+)/,
+    /vimeo\.com\/video\/(\d+)/,
+    /player\.vimeo\.com\/video\/(\d+)/,
+    /^(\d+)$/, // Direct video ID
+  ]
+
+  for (const pattern of patterns) {
+    const match = url.match(pattern)
+    if (match && match[1]) {
+      return match[1]
+    }
+  }
+
+  return null
+}
+
+/**
+ * Get Vimeo thumbnail URL (synchronous placeholder)
+ * Returns Vimeo's default thumbnail endpoint
+ * Note: Actual thumbnail fetching requires the Vimeo API and is async
+ */
+export function getVimeoThumbnail(vimeoUrl: string): string | null {
+  const videoId = extractVimeoId(vimeoUrl)
+  if (!videoId) return null
+
+  // Return Vimeo oEmbed API endpoint that can fetch thumbnail
+  // This is a synchronous placeholder - actual implementation would need server-side fetching
+  return `https://vumbnail.com/${videoId}.jpg`
+}
