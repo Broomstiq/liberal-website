@@ -55,7 +55,7 @@ export function FilterBar({ categories, activeFilter, onFilterChange }: FilterBa
               }`}
               aria-label={category.title}
             >
-              {hasIcon ? (
+              {hasIcon && category.icon ? (
                 <Image
                   src={urlFor(category.icon).width(150).url()}
                   alt={category.title}

@@ -6,6 +6,7 @@ import { VideoPlayer } from '@/components/VideoPlayer'
 import { ImageViewer } from '@/components/ImageViewer'
 import { getProjectBySlug, getProjects } from '@/lib/queries'
 import { urlFor } from '@/lib/sanity'
+import type { Category } from '@/types'
 
 /**
  * Project Detail Page
@@ -106,7 +107,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <div>
                 <h3 className="text-sm text-white/60 mb-1">Catégories</h3>
                 <div className="flex flex-wrap gap-2">
-                  {project.categories.map((category) => (
+                  {project.categories.map((category: Category) => (
                     <span
                       key={category._id}
                       className="px-3 py-1 border border-white/30 rounded-full text-sm"
@@ -148,7 +149,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 export async function generateStaticParams() {
   const projects = await getProjects(0, 100)
 
-  return projects.map((project) => ({
+  return projects.map((project: { slug: { current: string } }) => ({
     slug: project.slug.current,
   }))
 }
