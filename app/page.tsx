@@ -56,7 +56,7 @@ export default function Home() {
   // Client-side filtering
   const filteredProjects = activeFilter
     ? projects.filter((project) =>
-        project.categories.some((cat) => cat.slug.current === activeFilter)
+        project.categories?.some((cat) => cat.slug.current === activeFilter)
       )
     : projects
 

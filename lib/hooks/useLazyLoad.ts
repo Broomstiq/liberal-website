@@ -15,7 +15,7 @@ import { useEffect, useState, RefObject } from 'react'
  * @returns isVisible - Boolean indicating if element is visible
  */
 export function useLazyLoad(
-  ref: RefObject<HTMLElement>,
+  ref: RefObject<HTMLElement | null>,
   threshold = 0.1,
   rootMargin = '200px'
 ) {

@@ -1,5 +1,4 @@
 import type { PortableTextBlock } from '@portabletext/types'
-import type { SanityImageAsset } from '@sanity/image-url/lib/types/types'
 
 export interface Category {
   _id: string
