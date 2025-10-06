@@ -47,36 +47,54 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           {/* Title */}
           <h1 className="text-4xl md:text-5xl font-bold mb-8">{project.title}</h1>
 
-          {/* Media Display - Cascade: YouTube > Vimeo > mainImage > mainGif > gallery[0] */}
-          <div className="mb-12">
-            {project.youtubeUrl || project.vimeoUrl ? (
-              <VideoPlayer
-                youtubeUrl={project.youtubeUrl}
-                vimeoUrl={project.vimeoUrl}
-                title={project.title}
-              />
-            ) : project.mainImage ? (
-              <ImageViewer
-                src={urlFor(project.mainImage).width(1920).url()}
-                alt={project.title}
-                priority
-              />
-            ) : project.mainGif ? (
-              <ImageViewer
-                src={urlFor(project.mainGif).width(1920).url()}
-                alt={project.title}
-                priority
-              />
-            ) : project.gallery && project.gallery.length > 0 ? (
-              <ImageViewer
-                src={urlFor(project.gallery[0]).width(1920).url()}
-                alt={project.title}
-                priority
-              />
-            ) : (
-              <div className="w-full aspect-video bg-gray-900 flex items-center justify-center rounded-lg border-2 border-white/30">
-                <p className="text-white/60">Aucun média disponible</p>
+          {/* Media Display - Show all available main media */}
+          <div className="space-y-8 mb-12">
+            {/* Video */}
+            {(project.youtubeUrl || project.vimeoUrl) && (
+              <div>
+                <VideoPlayer
+                  youtubeUrl={project.youtubeUrl}
+                  vimeoUrl={project.vimeoUrl}
+                  title={project.title}
+                />
               </div>
+            )}
+
+            {/* Main Image */}
+            {project.mainImage && (
+              <div>
+                <ImageViewer
+                  src={urlFor(project.mainImage).width(1920).url()}
+                  alt={project.title}
+                  priority={!project.youtubeUrl && !project.vimeoUrl}
+                />
+              </div>
+            )}
+
+            {/* Main GIF */}
+            {project.mainGif && (
+              <div>
+                <ImageViewer
+                  src={urlFor(project.mainGif).width(1920).url()}
+                  alt={`${project.title} - Animation`}
+                  priority={!project.youtubeUrl && !project.vimeoUrl && !project.mainImage}
+                />
+              </div>
+            )}
+
+            {/* Fallback if no main media */}
+            {!project.youtubeUrl && !project.vimeoUrl && !project.mainImage && !project.mainGif && (
+              project.gallery && project.gallery.length > 0 ? (
+                <ImageViewer
+                  src={urlFor(project.gallery[0]).width(1920).url()}
+                  alt={project.title}
+                  priority
+                />
+              ) : (
+                <div className="w-full aspect-video bg-gray-900 flex items-center justify-center rounded-lg border-2 border-white/30">
+                  <p className="text-white/60">Aucun média disponible</p>
+                </div>
+              )
             )}
           </div>
 
@@ -134,24 +152,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
               </a>
-            </div>
-          )}
-
-          {/* Main Image/GIF (if exists alongside video) */}
-          {(project.youtubeUrl || project.vimeoUrl) && (project.mainImage || project.mainGif) && (
-            <div className="mb-12">
-              <h2 className="text-2xl font-bold mb-6">Image Principale</h2>
-              {project.mainImage ? (
-                <ImageViewer
-                  src={urlFor(project.mainImage).width(1920).url()}
-                  alt={project.title}
-                />
-              ) : project.mainGif ? (
-                <ImageViewer
-                  src={urlFor(project.mainGif).width(1920).url()}
-                  alt={`${project.title} - Animation`}
-                />
-              ) : null}
             </div>
           )}
 
