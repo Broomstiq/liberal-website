@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
-import { Resend } from 'resend'
+import sgMail from '@sendgrid/mail'
 import { z } from 'zod'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+sgMail.setApiKey(process.env.SENDGRID_API_KEY || '')
 
 const contactSchema = z.object({
   name: z.string().min(2).max(100),
@@ -15,10 +15,10 @@ export async function POST(request: Request) {
     const body = await request.json()
     const { name, email, message } = contactSchema.parse(body)
 
-    // Send email via Resend
-    await resend.emails.send({
-      from: 'Portfolio Contact <onboarding@resend.dev>', // You'll need to update this with verified domain
-      to: process.env.CONTACT_EMAIL || 'contact@example.com',
+    // Send notification email to site owner
+    await sgMail.send({
+      from: process.env.SENDGRID_FROM_EMAIL || 'customdigital360@gmail.com',
+      to: process.env.CONTACT_EMAIL || 'libe@example.com',
       replyTo: email,
       subject: `Nouveau message de ${name}`,
       html: `
@@ -27,6 +27,23 @@ export async function POST(request: Request) {
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Message:</strong></p>
         <p>${message.replace(/\n/g, '<br>')}</p>
+      `,
+    })
+
+    // Send confirmation email to form submitter
+    await sgMail.send({
+      from: process.env.SENDGRID_FROM_EMAIL || 'customdigital360@gmail.com',
+      to: email,
+      subject: 'Confirmation de votre message',
+      html: `
+        <h2>Merci de nous avoir contactés !</h2>
+        <p>Bonjour ${name},</p>
+        <p>Nous avons bien reçu votre message et nous vous répondrons dans les plus brefs délais.</p>
+        <p><strong>Votre message :</strong></p>
+        <p>${message.replace(/\n/g, '<br>')}</p>
+        <br>
+        <p>Cordialement,</p>
+        <p>L'équipe Libe</p>
       `,
     })
 
