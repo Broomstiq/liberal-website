@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import type { Category, Expertise } from '@/types'
 
 /**
@@ -30,9 +31,22 @@ interface FilterBarProps {
 
 export function FilterBar({ categories, expertises, activeCategory, activeExpertises, onCategoryChange, onExpertiseToggle, onClearAll }: FilterBarProps) {
   const hasActiveFilters = activeCategory !== null || activeExpertises.length > 0
+  const [isStuck, setIsStuck] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Check if we've scrolled past the filter bar's initial position
+      setIsStuck(window.scrollY > 500)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
-    <div className="sticky top-24 z-40 w-full space-y-3 py-6 bg-black/60 backdrop-blur-md border-b border-white/10">
+    <div className={`sticky top-24 z-40 w-full space-y-3 py-6 transition-all duration-300 ${
+      isStuck ? 'bg-black/40 backdrop-blur-md shadow-lg shadow-white/5' : ''
+    }`}>
       {/* Categories Row */}
       <div className="relative w-full">
         <div className="w-full overflow-x-auto scrollbar-hide">
