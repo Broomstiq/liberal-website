@@ -80,7 +80,11 @@ export async function getProjectBySlug(slug: string) {
     mosaicThumbnail,
     mainGif,
     mainImage,
-    gallery,
+    gallery[] {
+      asset,
+      caption,
+      hotspot
+    },
     youtubeUrl,
     vimeoUrl,
     websiteUrl,
