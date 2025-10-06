@@ -35,6 +35,34 @@ export function ProjectCard({ project }: ProjectCardProps) {
   const isVisible = useLazyLoad(cardRef, 0.1, '200px')
   const [vimeoThumbnail, setVimeoThumbnail] = useState<string | null>(null)
   const [isLoadingVimeo, setIsLoadingVimeo] = useState(false)
+  const [youtubeThumbnail, setYoutubeThumbnail] = useState<string | null>(null)
+
+  // Fetch YouTube thumbnail with fallback
+  useEffect(() => {
+    const needsYoutubeFetch =
+      !project.mosaicThumbnail &&
+      !project.mainGif &&
+      !project.mainImage &&
+      project.youtubeUrl
+
+    if (needsYoutubeFetch && isVisible && !youtubeThumbnail) {
+      const maxRes = getYouTubeThumbnail(project.youtubeUrl!, 'max')
+      const highRes = getYouTubeThumbnail(project.youtubeUrl!, 'high')
+
+      if (maxRes) {
+        // Try maxresdefault first, fallback to hqdefault if 404
+        fetch(maxRes, { method: 'HEAD' })
+          .then(res => {
+            if (res.ok) {
+              setYoutubeThumbnail(maxRes)
+            } else {
+              setYoutubeThumbnail(highRes)
+            }
+          })
+          .catch(() => setYoutubeThumbnail(highRes))
+      }
+    }
+  }, [isVisible, project, youtubeThumbnail])
 
   // Fetch Vimeo thumbnail if needed
   useEffect(() => {
@@ -63,7 +91,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
   }, [isVisible, project, vimeoThumbnail, isLoadingVimeo])
 
   // Cascade logic: mosaicThumbnail > mainGif > mainImage > YouTube thumbnail > Vimeo thumbnail
-  const getThumbnailUrl = (): string => {
+  const getThumbnailUrl = (): string | null => {
     if (project.mosaicThumbnail) {
       return urlFor(project.mosaicThumbnail).width(800).url()
     }
@@ -73,13 +101,13 @@ export function ProjectCard({ project }: ProjectCardProps) {
     if (project.mainImage) {
       return urlFor(project.mainImage).width(800).url()
     }
-    if (project.youtubeUrl) {
-      return getYouTubeThumbnail(project.youtubeUrl, 'max') || '/placeholder.png'
+    if (youtubeThumbnail) {
+      return youtubeThumbnail
     }
     if (vimeoThumbnail) {
       return vimeoThumbnail
     }
-    return '/placeholder.png'
+    return null
   }
 
   const imageUrl = getThumbnailUrl()
@@ -87,7 +115,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <div ref={cardRef} className="relative aspect-video group overflow-hidden rounded-lg">
       <Link href={`/projets/${project.slug.current}`}>
-        {isVisible ? (
+        {isVisible && imageUrl ? (
           <Image
             src={imageUrl}
             alt={project.title}
@@ -96,7 +124,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         ) : (
-          <div className="w-full h-full bg-gray-900 animate-pulse" />
+          <div className="w-full h-full bg-gray-900 animate-pulse flex items-center justify-center">
+            {isVisible && !imageUrl && (
+              <span className="text-gray-600 text-sm">No media</span>
+            )}
+          </div>
         )}
 
         {/* Hover Overlay */}
