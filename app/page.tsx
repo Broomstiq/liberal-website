@@ -116,9 +116,15 @@ export default function Home() {
           </div>
           <Link
             href="/projets/desintox"
-            className="block relative aspect-[16/5] rounded-xl overflow-hidden group bg-gradient-to-br from-red-900/20 to-purple-900/20 border-2 border-white/20 hover:border-white/40 transition-all duration-300"
+            className="block relative aspect-[16/5] rounded-xl overflow-hidden group border-2 border-white/20 hover:border-white/40 transition-all duration-300"
+            style={{
+              backgroundImage: 'url(/desintox-collage.jpg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
           >
-            <div className="absolute inset-0 flex flex-col justify-center items-center p-6 text-center">
+            <div className="absolute inset-0 bg-black/60 group-hover:bg-black/50 transition-colors duration-300" />
+            <div className="absolute inset-0 flex flex-col justify-center items-center p-6 text-center z-10">
               <h2 className="text-4xl md:text-5xl font-bold mb-3 group-hover:scale-105 transition-transform duration-300">
                 Désintox
               </h2>
@@ -131,7 +137,6 @@ export default function Home() {
                 <span className="px-3 py-1 border border-white/30 rounded-lg text-sm">Réalisation</span>
               </div>
             </div>
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
           </Link>
         </section>
 
@@ -148,17 +153,15 @@ export default function Home() {
         )}
 
         {/* Filter Bar */}
-        <section className="container mx-auto">
-          <FilterBar
-            categories={categories}
-            expertises={expertises}
-            activeCategory={activeCategory}
-            activeExpertises={activeExpertises}
-            onCategoryChange={setActiveCategory}
-            onExpertiseToggle={handleExpertiseToggle}
-            onClearAll={handleClearAll}
-          />
-        </section>
+        <FilterBar
+          categories={categories}
+          expertises={expertises}
+          activeCategory={activeCategory}
+          activeExpertises={activeExpertises}
+          onCategoryChange={setActiveCategory}
+          onExpertiseToggle={handleExpertiseToggle}
+          onClearAll={handleClearAll}
+        />
 
         {/* Projects Mosaïque Grid */}
         <section className="container mx-auto px-4 pb-12">
