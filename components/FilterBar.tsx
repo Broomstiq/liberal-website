@@ -1,8 +1,6 @@
 'use client'
 
-import Image from 'next/image'
 import type { Category, Expertise } from '@/types'
-import { urlFor } from '@/lib/sanity'
 
 /**
  * FilterBar - Category and Expertise filter component
@@ -27,19 +25,22 @@ interface FilterBarProps {
   activeExpertises: string[]
   onCategoryChange: (slug: string | null) => void
   onExpertiseToggle: (slug: string) => void
+  onClearAll: () => void
 }
 
-export function FilterBar({ categories, expertises, activeCategory, activeExpertises, onCategoryChange, onExpertiseToggle }: FilterBarProps) {
+export function FilterBar({ categories, expertises, activeCategory, activeExpertises, onCategoryChange, onExpertiseToggle, onClearAll }: FilterBarProps) {
+  const hasActiveFilters = activeCategory !== null || activeExpertises.length > 0
+
   return (
     <div className="w-full space-y-3 py-6">
       {/* Categories Row */}
       <div className="w-full overflow-x-auto scrollbar-hide">
         <div className="flex items-center gap-4 min-w-max px-4">
-          {/* "Tout" button */}
+          {/* "Tout" button - clears ALL filters */}
           <button
-            onClick={() => onCategoryChange(null)}
+            onClick={onClearAll}
             className={`px-6 py-2 rounded-full border-2 transition-all duration-300 whitespace-nowrap ${
-              activeCategory === null
+              !hasActiveFilters
                 ? 'bg-white text-black border-white'
                 : 'bg-transparent text-white border-white hover:bg-white/10'
             }`}
@@ -47,34 +48,21 @@ export function FilterBar({ categories, expertises, activeCategory, activeExpert
             Tout
           </button>
 
-          {/* Category buttons with Sanity images */}
+          {/* Category buttons - programmatic design */}
           {categories.map((category) => {
             const isActive = activeCategory === category.slug.current
-            const hasIcon = category.icon?.asset
 
             return (
               <button
                 key={category._id}
                 onClick={() => onCategoryChange(category.slug.current)}
-                className={`relative transition-all duration-300 hover:scale-105 ${
-                  isActive ? 'opacity-100 scale-105' : 'opacity-70 hover:opacity-90'
+                className={`px-5 py-2 rounded-lg border-2 transition-all duration-300 whitespace-nowrap font-medium text-sm ${
+                  isActive
+                    ? 'bg-white text-black border-white scale-105'
+                    : 'bg-transparent text-white border-white hover:bg-white/10 opacity-70 hover:opacity-90'
                 }`}
-                aria-label={category.title}
               >
-                {hasIcon && category.icon ? (
-                  <Image
-                    src={urlFor(category.icon).width(150).url()}
-                    alt={category.title}
-                    width={150}
-                    height={50}
-                    className="h-auto w-auto max-h-8"
-                    priority
-                  />
-                ) : (
-                  <span className="px-6 py-2 rounded-full border-2 border-white text-white whitespace-nowrap">
-                    {category.title}
-                  </span>
-                )}
+                {category.title}
               </button>
             )
           })}
