@@ -5,8 +5,8 @@ import { Header } from '@/components/Header'
 import { FilterBar } from '@/components/FilterBar'
 import { ProjectCard } from '@/components/ProjectCard'
 import { FeaturedCard } from '@/components/FeaturedCard'
-import { getProjects, getFeaturedProjects, getCategories } from '@/lib/queries'
-import type { Project, Category } from '@/types'
+import { getProjects, getFeaturedProjects, getCategories, getExpertises } from '@/lib/queries'
+import type { Project, Category, Expertise } from '@/types'
 
 /**
  * Homepage - Main landing page
@@ -28,21 +28,24 @@ export default function Home() {
   const [projects, setProjects] = useState<Project[]>([])
   const [featuredProjects, setFeaturedProjects] = useState<Project[]>([])
   const [categories, setCategories] = useState<Category[]>([])
-  const [activeFilter, setActiveFilter] = useState<string | null>(null)
+  const [expertises, setExpertises] = useState<Expertise[]>([])
+  const [activeFilter, setActiveFilter] = useState<{ type: 'category' | 'expertise' | null, slug: string | null }>({ type: null, slug: null })
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const [projectsData, featuredData, categoriesData] = await Promise.all([
+        const [projectsData, featuredData, categoriesData, expertisesData] = await Promise.all([
           getProjects(0, 24),
           getFeaturedProjects(),
           getCategories(),
+          getExpertises(),
         ])
 
         setProjects(projectsData)
         setFeaturedProjects(featuredData)
         setCategories(categoriesData)
+        setExpertises(expertisesData)
       } catch (error) {
         console.error('Error fetching data:', error)
       } finally {
@@ -54,11 +57,15 @@ export default function Home() {
   }, [])
 
   // Client-side filtering
-  const filteredProjects = activeFilter
+  const filteredProjects = activeFilter.type === null
+    ? projects
+    : activeFilter.type === 'category'
     ? projects.filter((project) =>
-        project.categories?.some((cat) => cat.slug.current === activeFilter)
+        project.categories?.some((cat) => cat.slug.current === activeFilter.slug)
       )
-    : projects
+    : projects.filter((project) =>
+        project.expertises?.some((exp) => exp.slug.current === activeFilter.slug)
+      )
 
   if (loading) {
     return (
@@ -88,8 +95,9 @@ export default function Home() {
         <section className="container mx-auto">
           <FilterBar
             categories={categories}
+            expertises={expertises}
             activeFilter={activeFilter}
-            onFilterChange={setActiveFilter}
+            onFilterChange={(type, slug) => setActiveFilter({ type, slug })}
           />
         </section>
 

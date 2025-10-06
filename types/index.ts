@@ -11,6 +11,17 @@ export interface Category {
   order?: number
 }
 
+export interface Expertise {
+  _id: string
+  title: string
+  slug: {
+    current: string
+  }
+  color?: string
+  description?: string
+  order?: number
+}
+
 export interface SanityImage {
   _type: 'image'
   asset: {
@@ -51,6 +62,7 @@ export interface Project {
   year?: number
   role?: string
   categories?: Category[]
+  expertises?: Expertise[]
   contextText?: PortableTextBlock[]
 
   // Display options

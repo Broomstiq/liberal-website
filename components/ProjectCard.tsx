@@ -112,6 +112,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
   const imageUrl = getThumbnailUrl()
 
+  // Get expertise colors for corner indicators
+  const expertiseColors = project.expertises?.map(exp => exp.color).filter(Boolean) || []
+
   return (
     <div ref={cardRef} className="relative aspect-video group overflow-hidden rounded-lg">
       <Link href={`/projets/${project.slug.current}`}>
@@ -128,6 +131,19 @@ export function ProjectCard({ project }: ProjectCardProps) {
             {isVisible && !imageUrl && (
               <span className="text-gray-600 text-sm">No media</span>
             )}
+          </div>
+        )}
+
+        {/* Expertise Corner Indicators */}
+        {expertiseColors.length > 0 && (
+          <div className="absolute top-0 right-0 flex flex-col gap-0.5">
+            {expertiseColors.map((color, index) => (
+              <div
+                key={index}
+                className="w-1 h-8"
+                style={{ backgroundColor: color }}
+              />
+            ))}
           </div>
         )}
 
