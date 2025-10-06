@@ -1,25 +1,29 @@
 'use client'
 
 /**
- * VideoPlayer - YouTube and Vimeo embed component
+ * VideoPlayer - Multi-platform video embed component
  *
  * @description
- * Wrapper for YouTube and Vimeo iframes with custom parameters for clean UI.
+ * Wrapper for video iframes with custom parameters for clean UI.
  * Removes branding and suggestions where possible.
  *
  * @features
- * - Supports both YouTube and Vimeo URLs
+ * - Supports YouTube, Vimeo, Dailymotion, and Instagram
  * - YouTube: modestbranding=1, rel=0 (minimal UI, no related videos)
  * - Vimeo: byline=0, portrait=0 (clean player)
+ * - Dailymotion: ui-start-screen-info=0 (clean player)
+ * - Instagram: embedded posts and reels
  * - Responsive aspect ratio (16:9)
  */
 interface VideoPlayerProps {
   youtubeUrl?: string
   vimeoUrl?: string
+  dailymotionUrl?: string
+  instagramUrl?: string
   title: string
 }
 
-export function VideoPlayer({ youtubeUrl, vimeoUrl, title }: VideoPlayerProps) {
+export function VideoPlayer({ youtubeUrl, vimeoUrl, dailymotionUrl, instagramUrl, title }: VideoPlayerProps) {
   // Extract video ID from YouTube URL
   const getYouTubeId = (url: string | null | undefined) => {
     if (!url) return null
@@ -43,8 +47,37 @@ export function VideoPlayer({ youtubeUrl, vimeoUrl, title }: VideoPlayerProps) {
     return null
   }
 
+  // Extract video ID from Dailymotion URL
+  const getDailymotionId = (url: string | null | undefined) => {
+    if (!url) return null
+    const patterns = [
+      /dailymotion\.com\/video\/([^_]+)/,
+      /dai\.ly\/([^_]+)/,
+    ]
+    for (const pattern of patterns) {
+      const match = url.match(pattern)
+      if (match && match[1]) return match[1]
+    }
+    return null
+  }
+
+  // Extract Instagram post/reel ID from URL
+  const getInstagramId = (url: string | null | undefined) => {
+    if (!url) return null
+    const patterns = [
+      /instagram\.com\/(?:p|reel)\/([^\/\?]+)/,
+    ]
+    for (const pattern of patterns) {
+      const match = url.match(pattern)
+      if (match && match[1]) return match[1]
+    }
+    return null
+  }
+
   const youtubeId = getYouTubeId(youtubeUrl)
   const vimeoId = getVimeoId(vimeoUrl)
+  const dailymotionId = getDailymotionId(dailymotionUrl)
+  const instagramId = getInstagramId(instagramUrl)
 
   // Priority: YouTube > Vimeo
   if (youtubeId) {
@@ -68,6 +101,38 @@ export function VideoPlayer({ youtubeUrl, vimeoUrl, title }: VideoPlayerProps) {
 
     return (
       <div className="relative w-full aspect-video rounded-lg overflow-hidden border-2 border-white">
+        <iframe
+          src={embedUrl}
+          title={title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="absolute inset-0 w-full h-full"
+        />
+      </div>
+    )
+  }
+
+  if (dailymotionId) {
+    const embedUrl = `https://www.dailymotion.com/embed/video/${dailymotionId}?ui-start-screen-info=0`
+
+    return (
+      <div className="relative w-full aspect-video rounded-lg overflow-hidden border-2 border-white">
+        <iframe
+          src={embedUrl}
+          title={title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="absolute inset-0 w-full h-full"
+        />
+      </div>
+    )
+  }
+
+  if (instagramId) {
+    const embedUrl = `https://www.instagram.com/p/${instagramId}/embed/`
+
+    return (
+      <div className="relative w-full aspect-square rounded-lg overflow-hidden border-2 border-white">
         <iframe
           src={embedUrl}
           title={title}
