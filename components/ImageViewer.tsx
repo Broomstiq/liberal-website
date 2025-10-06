@@ -31,18 +31,20 @@ export function ImageViewer({ src, alt, priority = false }: ImageViewerProps) {
   return (
     <>
       {/* Main Image Display */}
-      <div className="relative w-full max-h-[70vh] rounded-lg overflow-hidden">
+      <div className="relative w-full flex justify-center rounded-lg overflow-hidden">
         <div
-          className="relative w-full h-full cursor-zoom-in group"
+          className="relative cursor-zoom-in group max-h-[70vh]"
           onClick={openFullscreen}
         >
           <Image
             src={src}
             alt={alt}
-            width={1920}
-            height={1080}
-            className="w-full h-auto max-h-[70vh] object-contain"
+            width={0}
+            height={0}
+            sizes="100vw"
+            className="w-auto h-auto max-w-full max-h-[70vh] object-contain"
             priority={priority}
+            unoptimized
           />
           {/* Zoom hint overlay */}
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
@@ -75,10 +77,12 @@ export function ImageViewer({ src, alt, priority = false }: ImageViewerProps) {
             <Image
               src={src}
               alt={alt}
-              width={1920}
-              height={1080}
+              width={0}
+              height={0}
+              sizes="100vw"
               className="w-auto h-auto max-w-full max-h-[95vh] object-contain"
               priority
+              unoptimized
             />
           </div>
 
