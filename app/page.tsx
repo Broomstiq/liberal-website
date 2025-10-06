@@ -66,6 +66,15 @@ export default function Home() {
     )
   }
 
+  // Clear all filters
+  const handleClearAll = () => {
+    setActiveCategory(null)
+    setActiveExpertises([])
+  }
+
+  // Check if any filter is active
+  const hasActiveFilters = activeCategory !== null || activeExpertises.length > 0
+
   // Client-side filtering
   const filteredProjects = projects.filter((project) => {
     // Category filter (single, exclusive)
@@ -119,6 +128,18 @@ export default function Home() {
             onCategoryChange={setActiveCategory}
             onExpertiseToggle={handleExpertiseToggle}
           />
+
+          {/* Clear All Filters Button */}
+          {hasActiveFilters && (
+            <div className="flex justify-center px-4 pb-4">
+              <button
+                onClick={handleClearAll}
+                className="px-4 py-2 text-sm text-white/60 hover:text-white transition-colors duration-200 underline underline-offset-4"
+              >
+                Effacer tous les filtres
+              </button>
+            </div>
+          )}
         </section>
 
         {/* Projects Mosaïque Grid */}
