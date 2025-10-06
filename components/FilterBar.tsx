@@ -32,7 +32,7 @@ export function FilterBar({ categories, expertises, activeCategory, activeExpert
   const hasActiveFilters = activeCategory !== null || activeExpertises.length > 0
 
   return (
-    <div className="w-full space-y-3 py-6">
+    <div className="sticky top-24 z-40 w-full space-y-3 py-6 bg-black/60 backdrop-blur-md border-b border-white/10">
       {/* Categories Row */}
       <div className="relative w-full">
         <div className="w-full overflow-x-auto scrollbar-hide">
