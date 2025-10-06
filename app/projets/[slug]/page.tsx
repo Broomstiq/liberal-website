@@ -98,6 +98,38 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             )}
           </div>
 
+          {/* Context Text */}
+          {project.contextText && project.contextText.length > 0 && (
+            <div className="max-w-3xl mb-12">
+              <h2 className="text-2xl font-bold mb-4">À propos du projet</h2>
+              <div className="prose prose-invert max-w-none">
+                <PortableText value={project.contextText} />
+              </div>
+            </div>
+          )}
+
+          {/* Gallery */}
+          {project.gallery && project.gallery.length > 0 && (
+            <div className="mb-12">
+              <h2 className="text-2xl font-bold mb-6">Galerie</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {project.gallery.map((image: GalleryImage, index: number) => (
+                  <div key={index} className="space-y-2">
+                    <ImageViewer
+                      src={urlFor(image).width(1200).url()}
+                      alt={image.caption || `${project.title} - Image ${index + 1}`}
+                    />
+                    {image.caption && (
+                      <p className="text-sm text-white/60 text-center italic">
+                        {image.caption}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Metadata Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {project.client && (
@@ -173,16 +205,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     )}
                   </div>
                 ))}
-              </div>
-            </div>
-          )}
-
-          {/* Context Text */}
-          {project.contextText && project.contextText.length > 0 && (
-            <div className="max-w-3xl">
-              <h2 className="text-2xl font-bold mb-4">À propos du projet</h2>
-              <div className="prose prose-invert max-w-none">
-                <PortableText value={project.contextText} />
               </div>
             </div>
           )}

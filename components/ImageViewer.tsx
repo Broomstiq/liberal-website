@@ -31,7 +31,7 @@ export function ImageViewer({ src, alt, priority = false }: ImageViewerProps) {
   return (
     <>
       {/* Main Image Display */}
-      <div className="relative w-full max-h-[70vh] rounded-lg overflow-hidden border-2 border-white">
+      <div className="relative w-full max-h-[70vh] rounded-lg overflow-hidden">
         <div
           className="relative w-full h-full cursor-zoom-in group"
           onClick={openFullscreen}
