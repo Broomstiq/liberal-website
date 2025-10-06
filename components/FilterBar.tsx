@@ -56,7 +56,7 @@ export function FilterBar({ categories, expertises, activeCategory, activeExpert
               <button
                 key={category._id}
                 onClick={() => onCategoryChange(category.slug.current)}
-                className={`px-5 py-2 rounded-lg border-2 transition-all duration-300 whitespace-nowrap font-medium text-sm ${
+                className={`px-5 py-2 rounded-lg border-2 transition-all duration-300 whitespace-nowrap text-base tracking-wide font-bebas ${
                   isActive
                     ? 'bg-white text-black border-white scale-105'
                     : 'bg-transparent text-white border-white hover:bg-white/10 opacity-70 hover:opacity-90'
