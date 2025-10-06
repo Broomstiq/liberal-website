@@ -6,6 +6,7 @@ const bebasNeue = Bebas_Neue({
   weight: '400',
   subsets: ['latin'],
   variable: '--font-bebas',
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body
         className={`text-white antialiased ${bebasNeue.variable}`}
         style={{
+          fontFamily: 'var(--font-base)',
           backgroundImage: 'url(/ressources/black_textured_bg.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',

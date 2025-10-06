@@ -3,7 +3,10 @@
 @theme {
   --color-background: #000000;
   --color-foreground: #ffffff;
-  --font-bebas: var(--font-bebas);
+}
+
+:root {
+  --font-base: var(--font-bebas);
 }
 
 * {
