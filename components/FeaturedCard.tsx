@@ -88,7 +88,7 @@ export function FeaturedCard({ project }: FeaturedCardProps) {
       return urlFor(project.mosaicThumbnail).width(1200).url()
     }
     if (project.mainGif) {
-      return urlFor(project.mainGif).width(1200).format('gif').url()
+      return urlFor(project.mainGif).width(1200).url()
     }
     if (project.mainImage) {
       return urlFor(project.mainImage).width(1200).url()
