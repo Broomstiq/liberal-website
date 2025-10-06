@@ -96,7 +96,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       return urlFor(project.mosaicThumbnail).width(800).url()
     }
     if (project.mainGif) {
-      return urlFor(project.mainGif).width(800).url()
+      return urlFor(project.mainGif).width(800).format('gif').url()
     }
     if (project.mainImage) {
       return urlFor(project.mainImage).width(800).url()
