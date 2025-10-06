@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { Header } from '@/components/Header'
 import { FilterBar } from '@/components/FilterBar'
 import { ProjectCard } from '@/components/ProjectCard'
@@ -106,6 +107,34 @@ export default function Home() {
     <>
       <Header />
       <main className="min-h-screen pt-24">
+        {/* Pinned Desintox Project */}
+        <section className="container mx-auto px-4 py-12">
+          <div className="mb-8">
+            <span className="inline-block px-3 py-1 bg-white text-black text-sm font-medium rounded-full mb-4">
+              📌 Projet épinglé
+            </span>
+          </div>
+          <Link
+            href="/projets/desintox"
+            className="block relative aspect-[21/9] rounded-xl overflow-hidden group bg-gradient-to-br from-red-900/20 to-purple-900/20 border-2 border-white/20 hover:border-white/40 transition-all duration-300"
+          >
+            <div className="absolute inset-0 flex flex-col justify-center items-center p-8 text-center">
+              <h2 className="text-5xl md:text-6xl font-bold mb-4 group-hover:scale-105 transition-transform duration-300">
+                Désintox
+              </h2>
+              <p className="text-xl text-white/80 mb-4">Arte / Libération</p>
+              <p className="text-white/60 max-w-2xl mb-6">
+                Série d&apos;épisodes pour l&apos;émission Désintox diffusée sur Arte et Libération
+              </p>
+              <div className="flex gap-3">
+                <span className="px-4 py-2 border border-white/30 rounded-lg text-sm">Animation</span>
+                <span className="px-4 py-2 border border-white/30 rounded-lg text-sm">Réalisation</span>
+              </div>
+            </div>
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+          </Link>
+        </section>
+
         {/* Featured Projects Section */}
         {featuredProjects.length > 0 && (
           <section className="container mx-auto px-4 py-12">
