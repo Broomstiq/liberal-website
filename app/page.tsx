@@ -29,7 +29,8 @@ export default function Home() {
   const [featuredProjects, setFeaturedProjects] = useState<Project[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [expertises, setExpertises] = useState<Expertise[]>([])
-  const [activeFilter, setActiveFilter] = useState<{ type: 'category' | 'expertise' | null, slug: string | null }>({ type: null, slug: null })
+  const [activeCategory, setActiveCategory] = useState<string | null>(null)
+  const [activeExpertises, setActiveExpertises] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -56,16 +57,33 @@ export default function Home() {
     fetchData()
   }, [])
 
+  // Toggle expertise filter (multi-select)
+  const handleExpertiseToggle = (slug: string) => {
+    setActiveExpertises(prev =>
+      prev.includes(slug)
+        ? prev.filter(s => s !== slug)
+        : [...prev, slug]
+    )
+  }
+
   // Client-side filtering
-  const filteredProjects = activeFilter.type === null
-    ? projects
-    : activeFilter.type === 'category'
-    ? projects.filter((project) =>
-        project.categories?.some((cat) => cat.slug.current === activeFilter.slug)
+  const filteredProjects = projects.filter((project) => {
+    // Category filter (single, exclusive)
+    if (activeCategory) {
+      const hasCategory = project.categories?.some((cat) => cat.slug.current === activeCategory)
+      if (!hasCategory) return false
+    }
+
+    // Expertise filter (multiple, any match)
+    if (activeExpertises.length > 0) {
+      const hasAnyExpertise = project.expertises?.some((exp) =>
+        activeExpertises.includes(exp.slug.current)
       )
-    : projects.filter((project) =>
-        project.expertises?.some((exp) => exp.slug.current === activeFilter.slug)
-      )
+      if (!hasAnyExpertise) return false
+    }
+
+    return true
+  })
 
   if (loading) {
     return (
@@ -96,8 +114,10 @@ export default function Home() {
           <FilterBar
             categories={categories}
             expertises={expertises}
-            activeFilter={activeFilter}
-            onFilterChange={(type, slug) => setActiveFilter({ type, slug })}
+            activeCategory={activeCategory}
+            activeExpertises={activeExpertises}
+            onCategoryChange={setActiveCategory}
+            onExpertiseToggle={handleExpertiseToggle}
           />
         </section>
 
