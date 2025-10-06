@@ -34,39 +34,44 @@ export function FilterBar({ categories, expertises, activeCategory, activeExpert
   return (
     <div className="w-full space-y-3 py-6">
       {/* Categories Row */}
-      <div className="w-full overflow-x-auto scrollbar-hide">
-        <div className="flex items-center gap-4 min-w-max px-4">
-          {/* "Tout" button - clears ALL filters */}
-          <button
-            onClick={onClearAll}
-            className={`px-6 py-2 rounded-full border-2 transition-all duration-300 whitespace-nowrap ${
-              !hasActiveFilters
-                ? 'bg-white text-black border-white'
-                : 'bg-transparent text-white border-white hover:bg-white/10'
-            }`}
-          >
-            Tout
-          </button>
+      <div className="relative w-full">
+        <div className="w-full overflow-x-auto scrollbar-hide">
+          <div className="flex items-center gap-3 min-w-max px-4">
+            {/* "Tout" button - clears ALL filters */}
+            <button
+              onClick={onClearAll}
+              className={`px-4 py-1.5 rounded-full border-2 transition-all duration-300 whitespace-nowrap text-sm ${
+                !hasActiveFilters
+                  ? 'bg-white text-black border-white'
+                  : 'bg-transparent text-white border-white hover:bg-white/10'
+              }`}
+            >
+              Tout
+            </button>
 
-          {/* Category buttons - programmatic design */}
-          {categories.map((category) => {
-            const isActive = activeCategory === category.slug.current
+            {/* Category buttons - programmatic design */}
+            {categories.map((category) => {
+              const isActive = activeCategory === category.slug.current
 
-            return (
-              <button
-                key={category._id}
-                onClick={() => onCategoryChange(category.slug.current)}
-                className={`px-5 py-2 rounded-lg border-2 transition-all duration-300 whitespace-nowrap text-base tracking-widest ${
-                  isActive
-                    ? 'bg-white text-black border-white scale-105'
-                    : 'bg-transparent text-white border-white hover:bg-white/10 opacity-70 hover:opacity-90'
-                }`}
-              >
-                {category.title}
-              </button>
-            )
-          })}
+              return (
+                <button
+                  key={category._id}
+                  onClick={() => onCategoryChange(category.slug.current)}
+                  className={`px-4 py-1.5 rounded-lg border-2 transition-all duration-300 whitespace-nowrap text-sm tracking-widest ${
+                    isActive
+                      ? 'bg-white text-black border-white scale-105'
+                      : 'bg-transparent text-white border-white hover:bg-white/10 opacity-70 hover:opacity-90'
+                  }`}
+                >
+                  {category.title}
+                </button>
+              )
+            })}
+          </div>
         </div>
+
+        {/* Scroll indicator - right fade gradient */}
+        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-black via-black/50 to-transparent pointer-events-none" />
       </div>
 
       {/* Expertises Row - Smaller and more subtle */}
