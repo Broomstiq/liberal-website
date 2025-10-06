@@ -56,6 +56,9 @@ importers:
       resend:
         specifier: ^6.1.2
         version: 6.1.2
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       swr:
         specifier: ^2.3.6
         version: 2.3.6(react@19.1.1)
