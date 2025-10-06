@@ -120,6 +120,63 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             )}
           </div>
 
+          {/* Website Link */}
+          {project.websiteUrl && (
+            <div className="mb-12">
+              <a
+                href={project.websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-white rounded-full hover:bg-white hover:text-black transition-colors"
+              >
+                🔗 Visiter le site web
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+            </div>
+          )}
+
+          {/* Main Image/GIF (if exists alongside video) */}
+          {(project.youtubeUrl || project.vimeoUrl) && (project.mainImage || project.mainGif) && (
+            <div className="mb-12">
+              <h2 className="text-2xl font-bold mb-6">Image Principale</h2>
+              {project.mainImage ? (
+                <ImageViewer
+                  src={urlFor(project.mainImage).width(1920).url()}
+                  alt={project.title}
+                />
+              ) : project.mainGif ? (
+                <ImageViewer
+                  src={urlFor(project.mainGif).width(1920).url()}
+                  alt={`${project.title} - Animation`}
+                />
+              ) : null}
+            </div>
+          )}
+
+          {/* Gallery */}
+          {project.gallery && project.gallery.length > 0 && (
+            <div className="mb-12">
+              <h2 className="text-2xl font-bold mb-6">Galerie</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {project.gallery.map((image, index) => (
+                  <div key={index} className="space-y-2">
+                    <ImageViewer
+                      src={urlFor(image).width(1200).url()}
+                      alt={image.caption || `${project.title} - Image ${index + 1}`}
+                    />
+                    {image.caption && (
+                      <p className="text-sm text-white/60 text-center italic">
+                        {image.caption}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Context Text */}
           {project.contextText && project.contextText.length > 0 && (
             <div className="max-w-3xl">
