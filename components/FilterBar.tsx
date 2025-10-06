@@ -9,34 +9,37 @@ import { urlFor } from '@/lib/sanity'
  *
  * @description
  * Horizontal filter bar with two rows:
- * - Top row: Categories with Sanity icon images
- * - Bottom row: Expertises with color-coded pills
+ * - Top row: Categories with Sanity icon images (single selection)
+ * - Bottom row: Expertises with color-coded pills (multiple selection)
  *
  * @features
  * - "Tout" button to clear filters
- * - Separate category and expertise filters
- * - Color-coded expertise pills
+ * - Single category selection
+ * - Multiple expertise selection
+ * - Color-coded expertise pills (smaller, subtle)
  * - Active state visual feedback
  * - Mobile: horizontal scroll
  */
 interface FilterBarProps {
   categories: Category[]
   expertises: Expertise[]
-  activeFilter: { type: 'category' | 'expertise' | null, slug: string | null }
-  onFilterChange: (type: 'category' | 'expertise' | null, slug: string | null) => void
+  activeCategory: string | null
+  activeExpertises: string[]
+  onCategoryChange: (slug: string | null) => void
+  onExpertiseToggle: (slug: string) => void
 }
 
-export function FilterBar({ categories, expertises, activeFilter, onFilterChange }: FilterBarProps) {
+export function FilterBar({ categories, expertises, activeCategory, activeExpertises, onCategoryChange, onExpertiseToggle }: FilterBarProps) {
   return (
-    <div className="w-full space-y-4 py-6">
+    <div className="w-full space-y-3 py-6">
       {/* Categories Row */}
       <div className="w-full overflow-x-auto scrollbar-hide">
         <div className="flex items-center gap-4 min-w-max px-4">
           {/* "Tout" button */}
           <button
-            onClick={() => onFilterChange(null, null)}
+            onClick={() => onCategoryChange(null)}
             className={`px-6 py-2 rounded-full border-2 transition-all duration-300 whitespace-nowrap ${
-              activeFilter.type === null
+              activeCategory === null
                 ? 'bg-white text-black border-white'
                 : 'bg-transparent text-white border-white hover:bg-white/10'
             }`}
@@ -46,13 +49,13 @@ export function FilterBar({ categories, expertises, activeFilter, onFilterChange
 
           {/* Category buttons with Sanity images */}
           {categories.map((category) => {
-            const isActive = activeFilter.type === 'category' && activeFilter.slug === category.slug.current
+            const isActive = activeCategory === category.slug.current
             const hasIcon = category.icon?.asset
 
             return (
               <button
                 key={category._id}
-                onClick={() => onFilterChange('category', category.slug.current)}
+                onClick={() => onCategoryChange(category.slug.current)}
                 className={`relative transition-all duration-300 hover:scale-105 ${
                   isActive ? 'opacity-100 scale-105' : 'opacity-70 hover:opacity-90'
                 }`}
@@ -78,25 +81,26 @@ export function FilterBar({ categories, expertises, activeFilter, onFilterChange
         </div>
       </div>
 
-      {/* Expertises Row */}
+      {/* Expertises Row - Smaller and more subtle */}
       {expertises.length > 0 && (
         <div className="w-full overflow-x-auto scrollbar-hide">
-          <div className="flex items-center gap-3 min-w-max px-4">
+          <div className="flex items-center gap-2 min-w-max px-4">
             {expertises.map((expertise) => {
-              const isActive = activeFilter.type === 'expertise' && activeFilter.slug === expertise.slug.current
+              const isActive = activeExpertises.includes(expertise.slug.current)
+              const color = expertise.color || '#ffffff'
 
               return (
                 <button
                   key={expertise._id}
-                  onClick={() => onFilterChange('expertise', expertise.slug.current)}
-                  className={`px-4 py-2 rounded-full text-sm transition-all duration-300 whitespace-nowrap border-2 ${
+                  onClick={() => onExpertiseToggle(expertise.slug.current)}
+                  className={`px-3 py-1.5 rounded-full text-xs transition-all duration-300 whitespace-nowrap border ${
                     isActive
-                      ? 'text-black scale-105'
-                      : 'text-white border-white/30 hover:border-white/60'
+                      ? 'text-black scale-100 font-medium'
+                      : 'text-white/70 hover:text-white hover:border-white/60'
                   }`}
                   style={{
-                    backgroundColor: isActive ? expertise.color || '#ffffff' : 'transparent',
-                    borderColor: isActive ? expertise.color || '#ffffff' : undefined,
+                    backgroundColor: isActive ? color : 'transparent',
+                    borderColor: isActive ? color : `${color}60`,
                   }}
                 >
                   {expertise.title}

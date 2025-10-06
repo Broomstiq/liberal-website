@@ -136,11 +136,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
         {/* Expertise Corner Indicators */}
         {expertiseColors.length > 0 && (
-          <div className="absolute top-0 right-0 flex flex-col gap-0.5">
+          <div className="absolute top-0 right-0 flex flex-col gap-0.5 z-10">
             {expertiseColors.map((color, index) => (
               <div
                 key={index}
-                className="w-1 h-8"
+                className="w-2 h-12 rounded-bl-sm"
                 style={{ backgroundColor: color }}
               />
             ))}
