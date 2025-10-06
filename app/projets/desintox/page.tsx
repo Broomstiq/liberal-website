@@ -105,7 +105,7 @@ export default function DesintoxPage() {
           {/* Animateur Section */}
           <div className="mb-16">
             <h2 className="text-3xl font-bold mb-8">Animateur</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {animateurEpisodes.map((episode) => (
                 <div key={episode.number} className="space-y-2">
                   <h3 className="text-xl font-semibold mb-4">Épisode {episode.number}</h3>
@@ -121,7 +121,7 @@ export default function DesintoxPage() {
           {/* Réalisateur Section */}
           <div className="mb-16">
             <h2 className="text-3xl font-bold mb-8">Réalisateur</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {realisateurEpisodes.map((episode) => (
                 <div key={episode.number} className="space-y-2">
                   <h3 className="text-xl font-semibold mb-4">Épisode {episode.number}</h3>
