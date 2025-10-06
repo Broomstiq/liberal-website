@@ -75,7 +75,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             {project.mainGif && (
               <div>
                 <ImageViewer
-                  src={urlFor(project.mainGif).width(1920).format('gif').url()}
+                  src={urlFor(project.mainGif).width(1920).url()}
                   alt={`${project.title} - Animation`}
                   priority={!project.youtubeUrl && !project.vimeoUrl && !project.mainImage}
                 />
