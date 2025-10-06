@@ -127,19 +127,8 @@ export default function Home() {
             activeExpertises={activeExpertises}
             onCategoryChange={setActiveCategory}
             onExpertiseToggle={handleExpertiseToggle}
+            onClearAll={handleClearAll}
           />
-
-          {/* Clear All Filters Button */}
-          {hasActiveFilters && (
-            <div className="flex justify-center px-4 pb-4">
-              <button
-                onClick={handleClearAll}
-                className="px-4 py-2 text-sm text-white/60 hover:text-white transition-colors duration-200 underline underline-offset-4"
-              >
-                Effacer tous les filtres
-              </button>
-            </div>
-          )}
         </section>
 
         {/* Projects Mosaïque Grid */}
