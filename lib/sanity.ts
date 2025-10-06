@@ -80,15 +80,40 @@ export function extractVimeoId(url: string): string | null {
 }
 
 /**
- * Get Vimeo thumbnail URL (synchronous placeholder)
- * Returns Vimeo's default thumbnail endpoint
- * Note: Actual thumbnail fetching requires the Vimeo API and is async
+ * Get Vimeo thumbnail URL using our API route
+ * Returns URL to our API endpoint that fetches from Vimeo oEmbed
  */
 export function getVimeoThumbnail(vimeoUrl: string): string | null {
   const videoId = extractVimeoId(vimeoUrl)
   if (!videoId) return null
 
-  // Return Vimeo oEmbed API endpoint that can fetch thumbnail
-  // This is a synchronous placeholder - actual implementation would need server-side fetching
-  return `https://vumbnail.com/${videoId}.jpg`
+  // Use our API route to fetch Vimeo thumbnail
+  return `/api/vimeo-thumbnail?videoId=${videoId}`
+}
+
+/**
+ * Fetch Vimeo thumbnail URL server-side (async)
+ * Uses Vimeo oEmbed API to get actual thumbnail URL
+ */
+export async function fetchVimeoThumbnail(vimeoUrl: string): Promise<string | null> {
+  const videoId = extractVimeoId(vimeoUrl)
+  if (!videoId) return null
+
+  try {
+    const oEmbedUrl = `https://vimeo.com/api/oembed.json?url=https://vimeo.com/${videoId}`
+    const response = await fetch(oEmbedUrl, {
+      next: { revalidate: 86400 }, // Cache for 24 hours
+    })
+
+    if (!response.ok) {
+      console.error(`Vimeo oEmbed API error: ${response.status}`)
+      return null
+    }
+
+    const data = await response.json()
+    return data.thumbnail_url || null
+  } catch (error) {
+    console.error('Error fetching Vimeo thumbnail:', error)
+    return null
+  }
 }

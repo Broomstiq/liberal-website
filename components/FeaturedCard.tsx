@@ -1,8 +1,9 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { urlFor, getYouTubeThumbnail, getVimeoThumbnail } from '@/lib/sanity'
+import { urlFor, getYouTubeThumbnail, extractVimeoId } from '@/lib/sanity'
 import type { Project } from '@/types'
 
 /**
@@ -24,6 +25,35 @@ interface FeaturedCardProps {
 }
 
 export function FeaturedCard({ project }: FeaturedCardProps) {
+  const [vimeoThumbnail, setVimeoThumbnail] = useState<string | null>(null)
+  const [isLoadingVimeo, setIsLoadingVimeo] = useState(false)
+
+  // Fetch Vimeo thumbnail if needed
+  useEffect(() => {
+    const needsVimeoFetch =
+      !project.mosaicThumbnail &&
+      !project.mainGif &&
+      !project.mainImage &&
+      !project.youtubeUrl &&
+      project.vimeoUrl
+
+    if (needsVimeoFetch && !vimeoThumbnail && !isLoadingVimeo) {
+      const videoId = extractVimeoId(project.vimeoUrl!)
+      if (videoId) {
+        setIsLoadingVimeo(true)
+        fetch(`/api/vimeo-thumbnail?videoId=${videoId}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.thumbnail) {
+              setVimeoThumbnail(data.thumbnail)
+            }
+          })
+          .catch(err => console.error('Failed to fetch Vimeo thumbnail:', err))
+          .finally(() => setIsLoadingVimeo(false))
+      }
+    }
+  }, [project, vimeoThumbnail, isLoadingVimeo])
+
   // Cascade logic: mosaicThumbnail > mainGif > mainImage > YouTube thumbnail > Vimeo thumbnail
   const getThumbnailUrl = (): string => {
     if (project.mosaicThumbnail) {
@@ -38,8 +68,8 @@ export function FeaturedCard({ project }: FeaturedCardProps) {
     if (project.youtubeUrl) {
       return getYouTubeThumbnail(project.youtubeUrl, 'max') || '/placeholder.png'
     }
-    if (project.vimeoUrl) {
-      return getVimeoThumbnail(project.vimeoUrl) || '/placeholder.png'
+    if (vimeoThumbnail) {
+      return vimeoThumbnail
     }
     return '/placeholder.png'
   }
