@@ -6,7 +6,7 @@ import { VideoPlayer } from '@/components/VideoPlayer'
 import { ImageViewer } from '@/components/ImageViewer'
 import { getProjectBySlug, getProjects } from '@/lib/queries'
 import { urlFor } from '@/lib/sanity'
-import type { Category } from '@/types'
+import type { Category, GalleryImage } from '@/types'
 
 /**
  * Project Detail Page
@@ -160,7 +160,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <div className="mb-12">
               <h2 className="text-2xl font-bold mb-6">Galerie</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {project.gallery.map((image, index) => (
+                {project.gallery.map((image: GalleryImage, index: number) => (
                   <div key={index} className="space-y-2">
                     <ImageViewer
                       src={urlFor(image).width(1200).url()}
