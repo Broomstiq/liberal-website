@@ -22,6 +22,10 @@ export default defineConfig({
               .title('Catégories')
               .schemaType('category')
               .child(S.documentTypeList('category').title('Catégories')),
+            S.listItem()
+              .title('Expertises')
+              .schemaType('expertise')
+              .child(S.documentTypeList('expertise').title('Expertises')),
           ]),
     }),
     visionTool(),

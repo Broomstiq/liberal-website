@@ -24,6 +24,7 @@ export async function getProjects(start = 0, limit = 12, categorySlug?: string) 
         year,
         role,
         categories[]-> { _id, title, slug },
+        expertises[]-> { _id, title, slug, color },
         featured,
         publishedAt
       }`
@@ -41,6 +42,7 @@ export async function getProjects(start = 0, limit = 12, categorySlug?: string) 
         year,
         role,
         categories[]-> { _id, title, slug },
+        expertises[]-> { _id, title, slug, color },
         featured,
         publishedAt
       }`
@@ -65,7 +67,8 @@ export async function getFeaturedProjects() {
     vimeoUrl,
     client,
     year,
-    categories[]-> { title, slug }
+    categories[]-> { title, slug },
+    expertises[]-> { _id, title, slug, color }
   }`
 
   return client.fetch(query)
@@ -92,6 +95,7 @@ export async function getProjectBySlug(slug: string) {
     year,
     role,
     categories[]-> { _id, title, slug },
+    expertises[]-> { _id, title, slug, color },
     contextText,
     publishedAt
   }`
@@ -106,6 +110,19 @@ export async function getCategories() {
     title,
     slug,
     icon,
+    order
+  }`
+
+  return client.fetch(query)
+}
+
+// Get all expertises
+export async function getExpertises() {
+  const query = `*[_type == "expertise"] | order(order asc, title asc) {
+    _id,
+    title,
+    slug,
+    color,
     order
   }`
 
