@@ -44,13 +44,14 @@ export function FilterBar({ categories, expertises, activeCategory, activeExpert
   }, [])
 
   return (
-    <div className={`sticky top-24 z-40 w-full space-y-3 py-6 transition-all duration-300 ${
+    <div className={`sticky top-24 z-40 w-full transition-all duration-300 ${
       isStuck ? 'bg-black/40 backdrop-blur-md shadow-lg shadow-white/5' : ''
     }`}>
-      {/* Categories Row */}
-      <div className="relative w-full">
-        <div className="w-full overflow-x-auto scrollbar-hide">
-          <div className="flex items-center gap-3 min-w-max px-4">
+      <div className="container mx-auto space-y-3 py-6">
+        {/* Categories Row */}
+        <div className="relative w-full">
+          <div className="w-full overflow-x-auto scrollbar-hide">
+            <div className="flex items-center gap-3 min-w-max px-4">
             {/* "Tout" button - clears ALL filters */}
             <button
               onClick={onClearAll}
@@ -117,6 +118,7 @@ export function FilterBar({ categories, expertises, activeCategory, activeExpert
           </div>
         </div>
       )}
+      </div>
     </div>
   )
 }
