@@ -130,6 +130,12 @@ export const project = defineType({
       of: [{ type: 'reference', to: [{ type: 'category' }] }],
     }),
     defineField({
+      name: 'expertises',
+      title: 'Expertises',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'expertise' }] }],
+    }),
+    defineField({
       name: 'contextText',
       title: 'Texte de Contexte',
       type: 'array',
