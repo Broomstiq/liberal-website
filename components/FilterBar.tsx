@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import type { Category, Expertise } from '@/types'
 
 /**
@@ -32,19 +32,29 @@ interface FilterBarProps {
 export function FilterBar({ categories, expertises, activeCategory, activeExpertises, onCategoryChange, onExpertiseToggle, onClearAll }: FilterBarProps) {
   const hasActiveFilters = activeCategory !== null || activeExpertises.length > 0
   const [isStuck, setIsStuck] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const handleScroll = () => {
-      // Check if we've scrolled past the filter bar's initial position
-      setIsStuck(window.scrollY > 500)
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsStuck(!entry.isIntersecting)
+      },
+      { threshold: [1], rootMargin: '-96px 0px 0px 0px' }
+    )
+
+    if (ref.current) {
+      observer.observe(ref.current)
     }
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current)
+      }
+    }
   }, [])
 
   return (
-    <div className={`sticky top-24 z-40 w-full transition-all duration-300 ${
+    <div ref={ref} className={`sticky top-[96px] z-40 w-full transition-all duration-300 ${
       isStuck ? 'bg-black/40 backdrop-blur-md shadow-lg shadow-white/5' : ''
     }`}>
       <div className="container mx-auto space-y-3 py-6">
