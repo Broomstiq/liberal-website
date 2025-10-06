@@ -98,7 +98,7 @@ export default function DesintoxPage() {
           {/* Context Text */}
           <div className="max-w-3xl mb-12">
             <p className="text-lg text-white/80 mb-4">
-              Série d'épisodes pour l'émission Désintox diffusée sur Arte et Libération.
+              Série d&apos;épisodes pour l&apos;émission Désintox diffusée sur Arte et Libération.
             </p>
           </div>
 
