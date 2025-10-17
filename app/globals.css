@@ -6,7 +6,7 @@
 }
 
 :root {
-  --font-base: var(--font-bebas);
+  --font-base: Athelas, 'Iowan Old Style', 'Palatino Linotype', 'URW Palladio L', P052, serif;
 }
 
 * {

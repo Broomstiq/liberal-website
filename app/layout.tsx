@@ -1,13 +1,5 @@
 import type { Metadata } from 'next'
-import { Bebas_Neue } from 'next/font/google'
 import './globals.css'
-
-const bebasNeue = Bebas_Neue({
-  weight: '400',
-  subsets: ['latin'],
-  variable: '--font-bebas',
-  display: 'swap',
-})
 
 export const metadata: Metadata = {
   title: 'Libé Animation - Portfolio',
@@ -22,7 +14,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body
-        className={`text-white antialiased ${bebasNeue.variable}`}
+        className="text-white antialiased"
         style={{
           fontFamily: 'var(--font-base)',
           backgroundImage: 'url(/ressources/black_textured_bg.jpg)',
