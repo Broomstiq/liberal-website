@@ -55,7 +55,7 @@ export function Header() {
             <img
               src="/ressources/liberal_martin_handwritten_white.png"
               alt="Libé"
-              className="h-12 w-auto"
+              className="h-20 w-auto"
             />
           </Link>
 
