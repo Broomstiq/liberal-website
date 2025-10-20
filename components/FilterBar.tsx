@@ -99,8 +99,8 @@ export function FilterBar({ categories, expertises, activeCategory, activeExpert
         <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-black via-black/50 to-transparent pointer-events-none" />
       </div>
 
-      {/* Expertises Row - Smaller and more subtle */}
-      {expertises.length > 0 && (
+      {/* Expertises Row - DISABLED */}
+      {/* {expertises.length > 0 && (
         <div className="w-full overflow-x-auto scrollbar-hide">
           <div className="flex items-center gap-2 min-w-max px-4">
             {expertises.map((expertise) => {
@@ -127,7 +127,7 @@ export function FilterBar({ categories, expertises, activeCategory, activeExpert
             })}
           </div>
         </div>
-      )}
+      )} */}
       </div>
     </div>
   )
